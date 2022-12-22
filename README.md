@@ -1,3 +1,15 @@
+> 今回の環境
+Laravel 9.45.0
+
+node.js 18.8.0
+
+Vue3
+
+composer 2.4.2
+
+npm 8.18.0
+
+
 > Push時の約束
 
 1. mainブランチは本番反映用のブランチなので基本mergeはdebelopブランチで行う
