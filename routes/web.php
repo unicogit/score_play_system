@@ -42,4 +42,7 @@ Route::middleware([
                 'update' => 'callender.update',
                 'destroy' => 'callender.destroy',
                 'store'=>'callender.store']);
+    Route::get('/playview', function () {
+        return Inertia::render('PlayView');
+    })->name('PLayVideo');
 });
