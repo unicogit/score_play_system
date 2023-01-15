@@ -12,7 +12,9 @@ class Practice extends Model
     'id',
     'title',
     'practice_date',
+    'time',
     'video',
     'score',
+    'output',
     ];
 }

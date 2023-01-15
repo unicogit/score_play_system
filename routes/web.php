@@ -4,6 +4,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\CallenderController;
+use App\Http\Controllers\PracticeController;
+use App\Http\Controllers\PythonController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,8 +43,10 @@ Route::middleware([
                 'edit' => 'callender.edit',
                 'update' => 'callender.update',
                 'destroy' => 'callender.destroy',
-                'store'=>'callender.store']);
+                'store'=>'callender.store',
+                'python'=>'callender.python']);
     Route::get('/playview', function () {
         return Inertia::render('PlayView');
     })->name('PLayVideo');
+    Route::get('/python', [PythonController::class, 'python']);
 });

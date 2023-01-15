@@ -5,63 +5,49 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use \App\Models\Callender;
+use \App\Models\Practice;
 
 class CallenderController extends Controller
 {
     
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
-    {
+    {       
+        $practices = Practice::get();
             return Inertia::render(
                 'Callender',
                 [
-
+                    'practices'=>$practices
                 ]
             );  
     }
 
-    // /**
-    //  * Show the form for creating a new resource.
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function create()
-    // {
-    //     $callenders = Callender::get();
-    //     return Inertia::render(
+    public function create()
+    {
+        $practice = Practice::get();
+        return Inertia::render(
             
-    //         'CallenderCreate',
-    //         [
-    //             'callenders'=>$callenders,
-    //         ]
-    //     );
-    // }
+            'CallenderCreate',
+            [
+                'practice'=>$practice,
+            ]
+        );
+    }
 
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function store(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //             'category_id' => '',
-    //             'title' => 'required',
-    //             'text' => '',
-    //             'publish_flag' => '',
-    //             'publish_begin' => '',
-    //             'publish_end' => '',
-    //     ],[
-    //         'title.required' => 'タイトルを入力してください。',
-    //     ]);
-    //     Callender::create($validated);
-    //     return redirect()->route('callender.index');
-    // }
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => '',
+            'title' => '',
+            'practice_date' => '',
+            'time' => '',
+            'video' => '',
+            'score' => '',
+        ],[
+            'title.required' => 'タイトルを入力してください。',
+        ]);
+        Practice::create($validated);
+        return redirect()->route('callender.index');
+    }
 
     // /**
     //  * Display the specified resource.
@@ -143,4 +129,14 @@ class CallenderController extends Controller
     //             ->with('errorCode', ErrorCode::NOT_DELETE);
     //     }
     // }
+    public function python(Request $request)
+    {
+        $pythonPath =  "../app/Python/";
+        $command = "python" . $pythonPath . "hello.py";
+        
+        // コマンドを実行
+        exec($command, $outputs, $return);
+        
+        
+    }
 }

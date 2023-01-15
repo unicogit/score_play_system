@@ -13,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('practice', function (Blueprint $table) {
+        Schema::create('practices', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullablle();
-            $table->datetime('practice_date')->nullablle();
-            $table->string('video')->nullablle();
-            $table->string('score')->nullablle();
+            $table->string('title')->nullable();
+            $table->date('practice_date')->nullable();
+            $table->time('time')->nullable();
+            $table->string('video')->nullable();
+            $table->string('score')->nullable();
+            $tabel->string('output')->nullable();
             $table->timestamps();
         });
     }

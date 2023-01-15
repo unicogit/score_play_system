@@ -15,7 +15,7 @@
                 <div class="py-6">
                     <div class="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
                         <!-- Replace with your content -->
-                        <CallenderView />
+                        <CallenderView :practices = "practices" />
                         <!-- /End replace -->
                     </div>
                 </div>
@@ -31,4 +31,16 @@ import CallenderView from '@/components/Callender/Data.vue';
 import Header from '@/Components/Header.vue'
 import SideBar from '@/Components/SideBar.vue'
 
+</script>
+<script>
+ export default {
+                props: {
+                    practices:{
+                        type: Array
+                    }
+                },
+                data(){
+                    return null
+                }
+            }
 </script>
