@@ -3,6 +3,9 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\CallenderController;
+use App\Http\Controllers\PracticeController;
+use App\Http\Controllers\PythonController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,12 +27,26 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->name('dashboard');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::resource('/callender', CallenderController::class)
+        ->names(['index'=>'callender.index',
+                'show' => 'callender.show',
+                'create' => 'callender.create',
+                'edit' => 'callender.edit',
+                'update' => 'callender.update',
+                'destroy' => 'callender.destroy',
+                'store'=>'callender.store',
+                'python'=>'callender.python']);
+    Route::get('/playview', function () {
+        return Inertia::render('PlayView');
+    })->name('PLayVideo');
+    Route::get('/python', [PythonController::class, 'python']);
 });

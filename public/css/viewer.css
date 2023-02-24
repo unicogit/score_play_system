@@ -1,0 +1,16 @@
+/* viewer用css */
+
+.playbox{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    color: blue;
+}
+.scorebox{
+    width: 40%;
+    padding: 20px 10px;
+}
+.videobox{
+    width: 60%;
+    padding: 20px 10px;
+}
