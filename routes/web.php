@@ -50,3 +50,7 @@ Route::middleware([
     })->name('PLayVideo');
     Route::get('/python', [PythonController::class, 'python']);
 });
+
+Route::get('/record', function(){
+    return Inertia::render('Record');
+});
