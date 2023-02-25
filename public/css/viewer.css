@@ -1,12 +1,12 @@
 /* viewer用css */
 
-.playbox{
+#playbox{
     display: flex;
     flex-wrap: wrap;
     width: 100%;
     color: blue;
 }
-.scorebox{
+#scorebox{
     width: 40%;
     padding: 20px 10px;
 }

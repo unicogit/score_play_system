@@ -83,8 +83,8 @@ if (currentpath=='/viewer'){
 
 const navigation = [
   { name: 'ホーム', href: '/callender', current: home },
-  { name: '新規練習登録', href: '/callender.create', current: register },
-  { name: '動画再生ビュアー', href: '/viewer', current: viewer },
+  { name: '新規練習登録', href: '/callender/create', current: register },
+  { name: '動画再生ビュアー', href: '/playview', current: viewer },
 ]
 </script>
 

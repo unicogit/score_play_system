@@ -20,7 +20,7 @@ return new class extends Migration
             $table->time('time')->nullable();
             $table->string('video')->nullable();
             $table->string('score')->nullable();
-            $tabel->string('output')->nullable();
+            $table->string('output')->nullable();
             $table->timestamps();
         });
     }

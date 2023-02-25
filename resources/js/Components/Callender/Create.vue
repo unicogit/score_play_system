@@ -84,7 +84,7 @@
                 </div>
             </div>
         </div>
-        <a :href="route('callender.python')">python実行</a>
+        <!-- <a :href="route('/python')">python実行</a> -->
         <div class="pt-5">
             <div class="flex justify-end">
                 <a :href="route('callender.index')">

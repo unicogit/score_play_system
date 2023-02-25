@@ -101,12 +101,12 @@
               <time :datetime="day.date">{{ day.date }}</time>
               <ol class="mt-2">
                 <li v-for="practice in practices" :key="practice.id">
-                  <a v-if="practice.practice_date == year+'-'+('0'+month).slice(-2)+'-'+('0'+day.date).slice(-2)" :href="practice.title" class="group flex">
+                  <Link v-if="practice.practice_date == year+'-'+('0'+month).slice(-2)+'-'+('0'+day.date).slice(-2)" href="/playview" class="group flex">
                     <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">
                       {{ practice.title }}
                     </p>
                     <time :datetime="practice.time" class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block">{{ practice.time }}</time>
-                  </a>
+                  </Link>
                 </li>
                 <!-- <li v-if="day.events.length > 2" class="text-gray-500">+ {{ day.events.length - 2 }} 更に</li> -->
               </ol>
@@ -135,14 +135,12 @@
                 {{ practice.practice_date }}
               </time>
             </div>
-            <a :href="practice.title" class="ml-6 flex-none self-center rounded-md border border-gray-300 bg-white py-2 px-3 font-semibold text-gray-700 opacity-0 shadow-sm hover:bg-gray-50 focus:opacity-100 group-hover:opacity-100"
-              >Edit<span class="sr-only">, {{ practice.title }}</span></a
-            >
+            <Link href='/playview' class="ml-6 flex-none self-center rounded-md border border-gray-300 bg-white py-2 px-3 font-semibold text-gray-700 opacity-0 shadow-sm hover:bg-gray-50 focus:opacity-100 group-hover:opacity-100"
+              >Edit<span class="sr-only">, {{ practice.title }}</span></Link>
           </li>
         </ol>
       </div>
     </div>
-    {{ practices }}
   </template>
   
   <script setup>
@@ -154,7 +152,7 @@
     EllipsisHorizontalIcon,
   } from '@heroicons/vue/20/solid'
   import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-  
+  import { Link } from '@inertiajs/vue3'
   const date = new Date()
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
