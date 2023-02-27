@@ -10,7 +10,10 @@ import { Head } from '@inertiajs/inertia-vue3'
         <button v-on:click="recording = !recording">record</button>
         <div v-show="videoavailable">
             <button v-on:click="download">download</button>
+            <form action="{{ url('/record/send') }}"></form>
+            <button v-on:click="upload">upload</button>
         </div>
+
         <div id="video-container">
             <video id="video"></video>
         </div>
@@ -63,7 +66,9 @@ export default {
             a.click()
             window.URL.revokeObjectURL(url)
         },
-
+        upload: function(){
+            fetch('')
+        }
     },
     watch: {
         recording: function(newVal){
