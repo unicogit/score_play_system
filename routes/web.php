@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\CallenderController;
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\PythonController;
+use App\Http\Controllers\UploadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,3 +51,10 @@ Route::middleware([
     })->name('PLayVideo');
     Route::get('/python', [PythonController::class, 'python']);
 });
+
+Route::get('/record', function(){
+    return Inertia::render('Record');
+});
+
+Route::resource('/upload', UploadController::class, ['names' => 'upload']);
+Route::get('/upload', [UploadController::class, 'index']);
