@@ -39,16 +39,18 @@ class UploadController extends Controller
     public function store(Request $request)
     {
         //remaining columns
-        //'title',
         //'time',
         //'score',
         //'output',
+        $title = $request->input('title');
+        echo($title);
         $video = $request->file('video');
         $created_at = now()->timestamp;
         $path = $video->store('public/videos');
         $url = Storage::url($path);
 
         Practice::create([
+            'title' => $title,
             'video' => $url,
             'created_at' => $created_at,
         ]);

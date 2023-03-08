@@ -1,5 +1,6 @@
 <script setup>
 import { Head } from '@inertiajs/inertia-vue3'
+import axios from 'axios';
 </script>
 <template>
     <Head>
@@ -10,8 +11,13 @@ import { Head } from '@inertiajs/inertia-vue3'
         <button v-on:click="recording = !recording">record</button>
         <div v-show="videoavailable">
             <button v-on:click="download">download</button>
-            <form action="{{ url('/record/send') }}"></form>
+            <button @click="broadcast">broadcast</button>
             <button v-on:click="upload">upload</button>
+            <form :action="route('record.store')" method="post" enctype="multipart/form-data">
+                <input type="text" name="title">
+                <input type="file" name="video" accept="video/mp4"><br>
+                <input type="submit" value="upload">
+            </form>
         </div>
 
         <div id="video-container">
@@ -66,15 +72,22 @@ export default {
             a.click()
             window.URL.revokeObjectURL(url)
         },
-        upload: function(){
-            fetch('')
-        }
+        broadcast: function(){
+            axios.post(route('record.create'), "start")
+                .then(res=>{
+                    console.log(res);
+                })
+                .catch(e=>{
+                    console.log(e);
+                });
+        },
     },
     watch: {
         recording: function(newVal){
             if(newVal){
                 //record start
                 recorder.start()
+                
             }else{
                 //record stop
                 recorder.stop()

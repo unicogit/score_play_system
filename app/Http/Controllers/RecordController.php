@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\RecordingStart;
 use App\Models\Practice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class RecordController extends Controller
 {
@@ -14,7 +17,7 @@ class RecordController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Record');
     }
 
     /**
@@ -22,9 +25,12 @@ class RecordController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $message = $request->message;
+        //送信者を含めてメッセージを送信
+        event(new RecordingStart($message));
+        return redirect()->back()->with('success', 'recording started');
     }
 
     /**
@@ -35,7 +41,23 @@ class RecordController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //remaining columns
+        //'time',
+        //'score',
+        //'output',
+        $title = $request->input('title');
+        echo($title);
+        $video = $request->file('video');
+        $created_at = now()->timestamp;
+        $path = $video->store('public/videos');
+        $url = Storage::url($path);
+
+        Practice::create([
+            'title' => $title,
+            'video' => $url,
+            'created_at' => $created_at,
+        ]);
+        return redirect()->back()->with('success', 'video uploaded');
     }
 
     /**
