@@ -43,7 +43,6 @@ class UploadController extends Controller
         //'score',
         //'output',
         $title = $request->input('title');
-        echo($title);
         $video = $request->file('video');
         $created_at = now()->timestamp;
         $path = $video->store('public/videos');

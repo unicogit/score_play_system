@@ -4,7 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\CallenderController;
-use App\Http\Controllers\PracticeController;
+use App\Http\Controllers\PracticesController;
 use App\Http\Controllers\PythonController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\RecordController;
@@ -56,7 +56,9 @@ Route::middleware([
 
 Route::resource('/record', RecordController::class, ['names' => 'record']);
 Route::get('/record', [RecordController::class, 'index']);
-
+Route::post('/record/create', [RecordController::class, 'create']);
+Route::post('/record/destroy', [RecordController::class, 'destroy']);
 
 Route::resource('/upload', UploadController::class, ['names' => 'upload']);
 Route::get('/upload', [UploadController::class, 'index']);
+

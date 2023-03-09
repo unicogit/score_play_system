@@ -6,6 +6,7 @@ import { Head } from '@inertiajs/inertia-vue3';
         <title>upload video</title>
     </Head>
     <div id="app">
+        <button onclick="location.href='/record'">record</button><br>
         <!-- CSRF対策をオフにしたので注意！でもオンにするとうまくいかない... -->
         <form :action="route('upload.store')" method="post" enctype="multipart/form-data">
             <input type="text" name="title">
