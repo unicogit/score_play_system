@@ -1,7 +1,4 @@
 <template>
-    <Head>
-        <link rel="stylesheet" href="/css/viewer.css" >
-    </Head>
 <div>
     <SideBar />
     <div class="flex flex-1 flex-col md:pl-64">
@@ -18,7 +15,7 @@
             <div class="py-6">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
                     <!-- Replace with your content -->
-                    <PlayView />
+                    <PlayView :points="points" :timestamp="timestamp" />
                     <!-- /End replace -->
                 </div>
             </div>
@@ -26,12 +23,39 @@
     </div>
 </div>
 </template>
-<script setup>
+<script>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Welcome from '@/Components/Welcome.vue';
-import PlayView from '@/components/Play/Viewer.vue';
 import Header from '@/Components/Header.vue'
 import SideBar from '@/Components/SideBar.vue'
 import { Head, Link } from '@inertiajs/inertia-vue3';
+import PlayView from '@/components/Play/Viewer.vue';
+import axios from 'axios'
 
+export default {
+    components: {
+        AppLayout,
+        Welcome,
+        Header,
+        SideBar,
+        PlayView,
+    },
+    data() {
+        return {
+            timestamp: [],
+            points: [],
+        }
+    },
+    mounted () {
+        axios.get(route('fetch.positions'))
+            .then(res => {
+                console.log('res: ', res.data)
+                this.timestamp = res.data.timestamp
+                this.points = res.data.points
+            })
+            .catch(err => {
+                console.log('err: ', err)
+            });
+    },
+}
 </script>

@@ -1,6 +1,6 @@
 <template>
-    <div id ="playbox">
-        <div id="scorebox">
+    <div id="playbox">
+        <div @click="onClickScore" id="scorebox" class="reltive border-2">
             <img src="/scores/kirakira.png">
         </div>
         <div class="videobox">
@@ -12,31 +12,54 @@
     </div>
 </template>
 <script>
-    const img_src = "/scores/kirakira.png";
-    const video_src = "/videos/test.mp4";
-        window.onload = function () {
-        document.getElementById("playbox").addEventListener( "click", function( event ) { {
-        var clickX = event.pageX ;
-        var clickY = event.pageY ;
+const img_src = "/scores/kirakira.png";
+const video_src = "/videos/test.mp4";
+export default {
+    props: {
+        points: {
+            type: Array,
+        },
+        timestamp: {
+            type: Array,
+        },
+    },
+    computed: {
+    },
+    methods: {
+        onClickScore(e) {
+            console.log('offset:', e.offsetX, e.offsetY)
+            console.log('pos:', e.x, e.y)
 
-        // 要素の位置を取得
-        var clientRect = this.getBoundingClientRect() ;
-        var positionX = clientRect.left + window.pageXOffset ;
-        var positionY = clientRect.top + window.pageYOffset ;
+            const points = []
+            const timestamp = this.timestamp
 
-        // 要素内におけるクリック位置を計算
-        var x = clickX - positionX ;
-        var y = clickY - positionY ;
-        console.log(x,y)
-        }    
-    }) 
-    // if(x = 130 <= ){ 
-    // video.currentTime= 30;
-    // video.play()
-    // }
-    }
-    export default {
-        img_src
+            for (let i = 0; i < this.points.length; i++) {
+                const point = this.points[i];
+                points.push(point.map(x => x / 10))
+            }
+            
+            console.log('points:', points)
+            console.log('timestamp:', timestamp)
+        }
+    },
 }
 
 </script>
+
+<style>
+    /* viewer用css */
+    #playbox{
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        color: blue;
+    }
+    #scorebox{
+        width: 40%;
+        padding: 20px 10px;
+    }
+    .videobox{
+        width: 60%;
+        padding: 20px 10px;
+    }
+</style>
