@@ -26,10 +26,10 @@
 <script>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Welcome from '@/Components/Welcome.vue';
-import Header from '@/Components/Header.vue'
+import Header from '@/Components/header.vue'
 import SideBar from '@/Components/SideBar.vue'
 import { Head, Link } from '@inertiajs/inertia-vue3';
-import PlayView from '@/components/Play/Viewer.vue';
+import PlayView from '@/Components/Play/Viewer.vue';
 import axios from 'axios'
 
 export default {
