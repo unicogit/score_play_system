@@ -13,7 +13,7 @@
 </template>
 <script>
 const img_src = "/scores/kirakira.png";
-const video_src = "/videos/test.mp4";
+const video_src = "/videos/MVI25.mp4";
 export default {
     props: {
         points: {
