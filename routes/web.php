@@ -4,11 +4,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\CallenderController;
-use App\Http\Controllers\PracticeController;
+use App\Http\Controllers\PracticesController;
 use App\Http\Controllers\PythonController;
 use App\Http\Controllers\UploadController;
-use App\Http\Controllers\PlayViewController;
-
+use App\Http\Controllers\RecordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,16 +54,12 @@ Route::middleware([
     Route::get('/python', [PythonController::class, 'python']);
 });
 
-Route::get('/record', function(){
-    return Inertia::render('Record');
-});
-Route::get('/api/positions', [PlayViewController::class, 'fetchPositions'])->name('fetch.positions');
 
-Route::resource('/upload', UploadController::class)
-        ->names(['index'=>'upload.index',
-                'show' => 'upload.show',
-                'create' => 'upload.create',
-                'edit' => 'upload.edit',
-                'update' => 'upload.update',
-                'destroy' => 'upload.destroy',
-                'store'=>'upload.store']);
+Route::resource('/record', RecordController::class, ['names' => 'record']);
+Route::get('/record', [RecordController::class, 'index']);
+Route::post('/record/create', [RecordController::class, 'create']);
+Route::post('/record/destroy', [RecordController::class, 'destroy']);
+
+Route::resource('/upload', UploadController::class, ['names' => 'upload']);
+Route::get('/upload', [UploadController::class, 'index']);
+

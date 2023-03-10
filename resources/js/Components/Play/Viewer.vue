@@ -99,6 +99,7 @@ export default {
         },
         onClickMeasure(index) {
             const media = this.$refs.video;
+            console.log(this.timestamp[index][1]+8)
             media.currentTime = this.timestamp[index][1] + 8;
             media.play();
         },
