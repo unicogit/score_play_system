@@ -27,8 +27,8 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Welcome from '@/Components/Welcome.vue';
-import CallenderView from '@/components/Callender/Data.vue';
-import Header from '@/Components/Header.vue'
+import CallenderView from '@/Components/Callender/Data.vue';
+import Header from '@/Components/header.vue'
 import SideBar from '@/Components/SideBar.vue'
 
 </script>
