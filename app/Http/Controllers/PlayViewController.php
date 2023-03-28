@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Practice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Inertia\Inertia;
 
 class PlayViewController extends Controller
 {
+    function index(Request $request){
+        $practices = Practice::all();
+        return Inertia::render(('PlayView'), [
+            'practices' => $practices,
+        ]);
+    }
     public function fetchPositions(Request $request) 
     {
         $contents_array = \File::get(public_path('index.txt'));

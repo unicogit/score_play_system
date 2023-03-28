@@ -1,18 +1,19 @@
 <template>
+    <button @click="togglePlayback">{{ isPlaying ? '一時停止' : '再生'}}</button>
     <div id="playbox">
         <div @click="onClickScore" id="scorebox" class="reltive border-2">
             <img :src="imgSrc" />
         </div>
-        <div class="videobox">
+        <div class="videobox" v-for="practice in practices" :key="practice.id">
             <video
                 ref="video"
-                id="video"
+                class="video"
                 width="400"
                 height="300"
                 controls
                 autobuffer
             >
-                <source :src="videoSrc" />
+                <source :src="practice.video" />
             </video>
         </div>
     </div>
@@ -26,11 +27,17 @@ export default {
         timestamp: {
             type: Array,
         },
+        src : {
+            type: String,
+        },
+        practices: [],
     },
     data() {
         return {
             imgSrc: "/scores/kirakira.png",
-            videoSrc: "/videos/MVI_25.mp4",
+            // videoSrc: "/videos/MVI_25.mp4",
+            videoSrc: this.src,
+            isPlaying: false,
         };
     },
     computed: {},
@@ -103,6 +110,16 @@ export default {
             media.currentTime = this.timestamp[index][1] + 8;
             media.play();
         },
+        togglePlayback(){
+            this.isPlaying = !this.isPlaying
+            this.$refs.video.forEach(video => {
+                if (this.isPlaying) {
+                video.play()
+                } else {
+                video.pause()
+                }
+            })
+        }
     },
 };
 </script>

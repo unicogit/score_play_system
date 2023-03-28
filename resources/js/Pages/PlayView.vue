@@ -14,9 +14,11 @@
         <main>
             <div class="py-6">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                    <!-- Replace with your content -->
-                    <PlayView :points="points" :timestamp="timestamp" />
-                    <!-- /End replace -->
+                    <PlayView
+                        :practices="practices"
+                        :points="points"
+                        :timestamp="timestamp"
+                    />
                 </div>
             </div>
         </main>
@@ -40,6 +42,9 @@ export default {
         SideBar,
         PlayView,
     },
+    props:{
+        practices: [],
+    },
     data() {
         return {
             timestamp: [],
@@ -57,5 +62,8 @@ export default {
                 console.log('err: ', err)
             });
     },
+    methods: {
+        
+    }
 }
 </script>
