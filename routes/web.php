@@ -9,6 +9,7 @@ use App\Http\Controllers\PracticesController;
 use App\Http\Controllers\PythonController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\RecordController;
+use App\Http\Controllers\PlayViewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +55,8 @@ Route::middleware([
     })->name('Playview');
     Route::get('/python', [PythonController::class, 'python']);
 });
+Route::get('/api/positions', [PlayViewController::class, 'fetchPositions'])->name('fetch.positions');
+
 
 Route::get('/playview', [PlayViewController::class, 'index']);
 

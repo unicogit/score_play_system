@@ -34,10 +34,12 @@ export default {
     },
     data() {
         return {
+   origin/feature/multi-playback
             imgSrc: "/scores/kirakira.png",
             // videoSrc: "/videos/MVI_25.mp4",
             videoSrc: this.src,
             isPlaying: false,
+
         };
     },
     computed: {},
@@ -106,8 +108,8 @@ export default {
         },
         onClickMeasure(index) {
             const media = this.$refs.video;
-            console.log(this.timestamp[index][1]+8)
-            media.currentTime = this.timestamp[index][1] + 8;
+            console.log(this.timestamp[index][1]+7.5)
+            media.currentTime = this.timestamp[index][1] + 7.5;
             media.play();
         },
         togglePlayback(){

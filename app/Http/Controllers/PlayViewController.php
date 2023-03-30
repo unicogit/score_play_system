@@ -26,7 +26,7 @@ class PlayViewController extends Controller
         $points = [];
 
         foreach ($contents_split as $content) {
-            $val = array_map('intval', explode(',', $content));
+            $val = array_map('floatval', explode(',', $content));
             $timestamp[] = $val;
         }
 
