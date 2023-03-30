@@ -152,7 +152,7 @@
     EllipsisHorizontalIcon,
   } from '@heroicons/vue/20/solid'
   import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-  import { Link } from '@inertiajs/vue3'
+  import { Link } from '@inertiajs/inertia-vue3'
   const date = new Date()
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
