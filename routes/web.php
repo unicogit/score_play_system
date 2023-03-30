@@ -9,7 +9,6 @@ use App\Http\Controllers\PracticesController;
 use App\Http\Controllers\PythonController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\RecordController;
-use App\Http\Controllers\PlayViewController;
 
 /*
 |--------------------------------------------------------------------------
