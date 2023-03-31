@@ -34,7 +34,6 @@ export default {
     },
     data() {
         return {
-   origin/feature/multi-playback
             imgSrc: "/scores/kirakira.png",
             // videoSrc: "/videos/MVI_25.mp4",
             videoSrc: this.src,
