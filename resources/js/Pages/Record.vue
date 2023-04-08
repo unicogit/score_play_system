@@ -10,8 +10,7 @@ import axios from 'axios';
     <div id="app">
         <button @click="broadcast">{{ record_status }}</button>
         <div v-show="videoavailable">
-            <button v-on:click="download">download</button>
-            <button @click="broadcast">broadcast</button>
+            <button v-on:click="download">download</button><br>
             <button @click="upload">upload</button>
             <form :action="route('record.store')" method="post" enctype="multipart/form-data">
                 <input type="text" name="title">
