@@ -9,7 +9,7 @@
                 <div class="space-y-6 sm:space-y-5">
                     <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
                         <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                            >練習タイトル</label
+                            >楽曲のタイトル</label
                         >
                         <div class="mt-1 sm:col-span-2 sm:mt-0">
                             <input
@@ -52,7 +52,7 @@
                             />
                         </div>
                     </div>
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+                    <!-- <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
                         <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                             >解析用動画</label
                         >
@@ -66,8 +66,8 @@
                                 v-model="form.video"
                             />
                         </div>
-                    </div>
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+                    </div> -->
+                    <!-- <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
                         <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                             解析用楽譜</label>
                         <div class="mt-1 sm:col-span-2 sm:mt-0">
@@ -80,7 +80,7 @@
                                 v-model="form.score"
                             />
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
