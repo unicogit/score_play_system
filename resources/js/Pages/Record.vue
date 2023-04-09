@@ -22,7 +22,7 @@ import axios from 'axios';
         </div>
 
         <div id="video-container">
-            <video id="video"></video>
+            <video id="video" muted></video>
         </div>
     </div>
 </template>
