@@ -19,7 +19,7 @@
 <template>
     <div id="app">
         <nav id="menu">
-            <button id="playview" class="button_menu_index" @click="jumpPlayview">振り返る</button>
+            <button id="playview" class="button_menu_index" @click="jumpPlayview">カレンダーから振り返る</button>
             <button id="record" class="button_menu_index" @click="jumpRecord">撮影する</button>
         </nav>
     </div>
@@ -29,7 +29,7 @@ export default{
     name: 'app',
     methods: {
         jumpPlayview: function(){
-            window.location.href = '/playview';
+            window.location.href = '/callender';
         },
         jumpRecord: function(){
             window.location.href = '/record';
