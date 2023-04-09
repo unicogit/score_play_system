@@ -16,7 +16,7 @@ import axios from 'axios';
                 <label for="title">タイトルを入力</label>
                 <input type="text" name="title">
                 <br>
-                <input type="file" name="video" accept="video/mp4" value="動画を選択"><br>
+                <input type="file" name="video" accept="video/mp4"><br>
                 <input type="submit" value="選択した動画をアップロード">
             </form>
         </div>
