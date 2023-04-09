@@ -10,12 +10,12 @@ import axios from 'axios';
     <div id="app">
         <button @click="broadcast">{{ record_status }}</button>
         <div v-show="videoavailable">
-            <button v-on:click="download">download</button><br>
-            <button @click="upload">upload</button>
+            <button v-on:click="download">録画をダウンロード</button><br>
+            <button @click="upload">録画をアップロード</button>
             <form :action="route('record.store')" method="post" enctype="multipart/form-data">
                 <input type="text" name="title">
                 <input type="file" name="video" accept="video/mp4"><br>
-                <input type="submit" value="upload">
+                <input type="submit" value="選択した動画をアップロード">
             </form>
         </div>
 
@@ -56,6 +56,7 @@ export default {
             console.log("An error occured! " + err)
         });
         window.Echo.channel('multi_record').listen('RecordingStart', (e)=>{
+            console.log('RecordingStart');
             console.log(e);
             let status = e.message.status;
             this.recording = status;
@@ -89,9 +90,11 @@ export default {
             };
             axios.post(route('record.create'), params)
             .then(res=>{
+                console.log('create');
                 console.log(res);
             })
             .catch(e=>{
+                console.log('broadcast error');
                 console.log(e.response);
             });
         },
@@ -114,12 +117,12 @@ export default {
             if(newVal){
                 //record start
                 recorder.start();
-                this.record_status = 'stop';
+                this.record_status = '撮影終了';
             }else{
                 //record stop
                 recorder.stop();
                 this.videoavailable = true;
-                this.record_status = 'record start';
+                this.record_status = '撮影開始';
             }
         }
     }
