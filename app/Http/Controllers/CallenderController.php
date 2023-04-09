@@ -49,24 +49,20 @@ class CallenderController extends Controller
         return redirect()->route('callender.index');
     }
 
-    // /**
-    //  * Display the specified resource.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function show($id)
-    // {
-    //     $callenders = Callender::get();
-    //     $callender = $callenders->where('id', $id)->first();
-    //     return Inertia::render(
-    //         'CallenderEdit',
-    //         [
-    //             'id' => $id,
-    //             'callender' => $callender,
-    //         ]
-    //     );
-    // }
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $practice = Practice::findOrFail($id);
+
+        return Inertia::render('Callender/Show', [
+            'data' => $practice,
+        ]);
+    }
 
     // /**
     //  * Show the form for editing the specified resource.
