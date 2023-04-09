@@ -71,3 +71,6 @@ Route::post('/upload-image', [ImageController::class, 'store'])->name('upload-im
 Route::post('/upload-video', [ImageController::class, 'store'])->name('upload-video');
 Route::get('/images', [ImageController::class, 'index'])->name('images');
 
+Route::get('/recording', function () {
+    return Inertia::render('SimpleRecord');
+});
