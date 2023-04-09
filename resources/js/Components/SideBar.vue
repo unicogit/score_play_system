@@ -66,24 +66,29 @@
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 var currentpath = location.pathname;
-let home,register,viewer = false;
+let home,register,record,viewer = false;
 
 if (currentpath=='/callender'){
   home = true
-  register,viewer = false;
+  register,record,viewer = false;
 }
 if (currentpath=='/practice_register'){
   register = true
-  home,viewer = false;
+  home,record,viewer = false;
+}
+if (currentpath=='/record'){
+    record = true;
+    home,register,viewer = false;
 }
 if (currentpath=='/viewer'){
   viewer = true
-  register,home = false;
+  register,home,record = false;
 }
 
 const navigation = [
   { name: 'ホーム', href: '/callender', current: home },
   { name: '新規練習登録', href: '/callender/create', current: register },
+  { name: 'レッスンを撮影', href: '/record', current: record,},
 //   { name: '動画再生ビュアー', href: '/playview', current: viewer },
 ]
 </script>

@@ -13,8 +13,10 @@ import axios from 'axios';
             <button v-on:click="download">録画をダウンロード</button><br>
             <button @click="upload">録画をアップロード</button>
             <form :action="route('record.store')" method="post" enctype="multipart/form-data">
+                <label for="title">タイトルを入力</label>
                 <input type="text" name="title">
-                <input type="file" name="video" accept="video/mp4"><br>
+                <br>
+                <input type="file" name="video" accept="video/mp4" value="動画を選択"><br>
                 <input type="submit" value="選択した動画をアップロード">
             </form>
         </div>
@@ -34,7 +36,7 @@ export default {
         return {
             recording: false,
             videoavailable: false,
-            record_status: 'record start',
+            record_status: '録画開始',
         }
     },
     mounted() {
@@ -84,9 +86,9 @@ export default {
         },
         broadcast: function(){
             //console.log('broadcast');
-            let toggled_status = !this.recording;
+                this.recording = !this.recording;
             var params = {
-                'status': toggled_status,
+                'status': this.recording,
             };
             axios.post(route('record.create'), params)
             .then(res=>{
