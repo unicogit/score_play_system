@@ -6,27 +6,27 @@
         </h1>
         <div class="flex items-center">
           <div class="flex items-center rounded-md shadow-sm md:items-stretch">
-            <button type="button" class="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50">
+            <button type="button" class="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50" @click="prevMonth()">
               <span class="sr-only">先月</span>
               <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
             </button>
-            <button type="button" class="hidden border-t border-b border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block">本日</button>
+            <!-- <button type="button" class="hidden border-t border-b border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block">本日</button> -->
             <span class="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
-            <button type="button" class="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50">
+            <button type="button" class="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50" @click="nextMonth()">
               <span class="sr-only">次月</span>
               <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
             </button>
           </div>
           <div class="hidden md:ml-4 md:flex md:items-center">
             <Menu as="div" class="relative">
-              <MenuButton type="button" class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
+              <!-- <MenuButton type="button" class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
                 月表示
                 <ChevronDownIcon class="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
-              </MenuButton>
+              </MenuButton> -->
   
               <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                 <MenuItems class="absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <div class="py-1">
+                  <!-- <div class="py-1">
                     <MenuItem v-slot="{ active }">
                       <a href="#" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']">日表示</a>
                     </MenuItem>
@@ -39,7 +39,7 @@
                     <MenuItem v-slot="{ active }">
                       <a href="#" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']">年表示</a>
                     </MenuItem>
-                  </div>
+                  </div> -->
                 </MenuItems>
               </transition>
             </Menu>
@@ -64,7 +64,7 @@
                     <a href="#" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']">現在の日付へ</a>
                   </MenuItem>
                 </div>
-                <div class="py-1">
+                <!-- <div class="py-1">
                   <MenuItem v-slot="{ active }">
                     <a href="#" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']">日表示</a>
                   </MenuItem>
@@ -77,7 +77,7 @@
                   <MenuItem v-slot="{ active }">
                     <a href="#" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']">年表示</a>
                   </MenuItem>
-                </div>
+                </div> -->
               </MenuItems>
             </transition>
           </Menu>
@@ -135,7 +135,7 @@
                 {{ practice.practice_date }}
               </time>
             </div>
-            <Link href='/playview' class="ml-6 flex-none self-center rounded-md border border-gray-300 bg-white py-2 px-3 font-semibold text-gray-700 opacity-0 shadow-sm hover:bg-gray-50 focus:opacity-100 group-hover:opacity-100"
+            <Link href="`/callender/${practice.id}`" class="ml-6 flex-none self-center rounded-md border border-gray-300 bg-white py-2 px-3 font-semibold text-gray-700 opacity-0 shadow-sm hover:bg-gray-50 focus:opacity-100 group-hover:opacity-100"
               >Edit<span class="sr-only">, {{ practice.title }}</span></Link>
           </li>
         </ol>
@@ -153,100 +153,60 @@
   } from '@heroicons/vue/20/solid'
   import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
   import { Link } from '@inertiajs/inertia-vue3'
-  const date = new Date()
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const startDate = new Date(year, month - 1, 1) // 月の最初の日を取得
-  const endDate = new Date(year, month,  0) // 月の最後の日を取得
+  import { ref } from 'vue'
+  import { watchEffect } from 'vue'
+//   const date = new Date()
+//   const year = date.getFullYear();
+//   const month = date.getMonth() + 1;
+//   const startDate = new Date(year, month - 1, 1) // 月の最初の日を取得
+//   const endDate = new Date(year, month,  0) // 月の最後の日を取得
+//   const endDayCount = endDate.getDate() // 月の末日
+//   const startDay = startDate.getDay()
+//   const days = []
+//   console.log(endDayCount)
+//   const maxday = parseInt(endDayCount);
+//   for (let i= 1; i <= maxday; i++){
+//     days.push({date:i})
+//   }
+//   console.log(days)
+//   const day=[
+//       { date: year+'-'+month+'-'+startDay+1}
+//   ]
+
+//   function prev(){
+//     showDate.setMonth(showDate.getMonth() - 1);
+//     showProcess(showDate);
+// }
+
+const date = ref(new Date())
+const year = ref(date.value.getFullYear())
+const month = ref(date.value.getMonth() + 1)
+
+function prevMonth() {
+  date.value.setMonth(date.value.getMonth() - 1)
+  year.value = date.value.getFullYear()
+  month.value = date.value.getMonth() + 1
+}
+
+function nextMonth() {
+  date.value.setMonth(date.value.getMonth() + 1)
+  year.value = date.value.getFullYear()
+  month.value = date.value.getMonth() + 1
+}
+
+const days = ref([])
+
+watchEffect(() => {
+  const startDate = new Date(year.value, month.value - 1, 1) // 月の最初の日を取得
+  const endDate = new Date(year.value, month.value, 0) // 月の最後の日を取得
   const endDayCount = endDate.getDate() // 月の末日
   const startDay = startDate.getDay()
-  const days = []
-  console.log(endDayCount)
-  const maxday = parseInt(endDayCount);
-  for (let i= 1; i <= maxday; i++){
-    days.push({date:i})
+  const newDays = []
+  for (let i = 1; i <= endDayCount; i++) {
+    newDays.push({ date: i })
   }
-  console.log(days)
-  const day=[
-      { date: year+'-'+month+'-'+startDay+1}
-  ]
-
-  function prev(){
-    showDate.setMonth(showDate.getMonth() - 1);
-    showProcess(showDate);
-}
-  // const days = [
-  //   { date: '2021-12-27', events: [] },
-  //   { date: '2021-12-28', events: [] },
-  //   { date: '2021-12-29', events: [] },
-  //   { date: '2021-12-30', events: [] },
-  //   { date: '2021-12-31', events: [] },
-  //   { date: '2022-01-01', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-02', isCurrentMonth: true, events: [] },
-  //   {
-  //     date: '2022-01-03',
-  //     isCurrentMonth: true,
-  //     events: [
-  //       { id: 1, name: '練習', time: '10AM', datetime: '2022-01-03T10:00', href: '#' },
-  //       { id: 2, name: '練習', time: '2PM', datetime: '2022-01-03T14:00', href: '#' },
-  //     ],
-  //   },
-  //   { date: '2022-01-04', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-05', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-06', isCurrentMonth: true, events: [] },
-  //   {
-  //     date: '2022-01-07',
-  //     isCurrentMonth: true,
-  //     events: [{ id: 3, name: '練習', time: '6PM', datetime: '2022-01-08T18:00', href: '#' }],
-  //   },
-  //   { date: '2022-01-08', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-09', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-10', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-11', isCurrentMonth: true, events: [] },
-  //   {
-  //     date: '2022-01-12',
-  //     isCurrentMonth: true,
-  //     isToday: true,
-  //     events: [{ id: 6, name: "練習", time: '2PM', datetime: '2022-01-25T14:00', href: '#' }],
-  //   },
-  //   { date: '2022-01-13', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-14', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-15', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-16', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-17', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-18', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-19', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-20', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-21', isCurrentMonth: true, events: [] },
-  //   {
-  //     date: '2022-01-22',
-  //     isCurrentMonth: true,
-  //     isSelected: true,
-  //     events: [
-  //       { id: 4, name: '練習', time: '3PM', datetime: '2022-01-22T15:00', href: '#' },
-  //       { id: 5, name: '練習', time: '7PM', datetime: '2022-01-22T19:00', href: '#' },
-  //     ],
-  //   },
-  //   { date: '2022-01-23', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-24', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-25', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-26', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-27', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-28', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-29', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-30', isCurrentMonth: true, events: [] },
-  //   { date: '2022-01-31', isCurrentMonth: true, events: [] },
-  //   { date: '2022-02-01', events: [] },
-  //   { date: '2022-02-02', events: [] },
-  //   {
-  //     date: '2022-02-03',
-  //     events: [{ id: 7, name: '練習', time: '9PM', datetime: '2022-02-04T21:00', href: '#' }],
-  //   },
-  //   { date: '2022-02-04', events: [] },
-  //   { date: '2022-02-05', events: [] },
-  //   { date: '2022-02-06', events: [] },
-  // ]
-  // const selectedDay = practices.find((practice) => practice.isSelected)
+  days.value = newDays
+})
   </script>
   <script>
    export default {

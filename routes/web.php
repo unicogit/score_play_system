@@ -9,6 +9,7 @@ use App\Http\Controllers\PracticesController;
 use App\Http\Controllers\PythonController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\RecordController;
+use App\Http\Controllers\ImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,7 +57,6 @@ Route::middleware([
 });
 Route::get('/api/positions', [PlayViewController::class, 'fetchPositions'])->name('fetch.positions');
 
-
 Route::get('/playview', [PlayViewController::class, 'index']);
 
 Route::resource('/record', RecordController::class, ['names' => 'record']);
@@ -66,4 +66,8 @@ Route::post('/record/destroy', [RecordController::class, 'destroy']);
 
 Route::resource('/upload', UploadController::class, ['names' => 'upload']);
 Route::get('/upload', [UploadController::class, 'index']);
+
+Route::post('/upload-image', [ImageController::class, 'store'])->name('upload-image');
+Route::post('/upload-video', [ImageController::class, 'store'])->name('upload-video');
+Route::get('/images', [ImageController::class, 'index'])->name('images');
 
