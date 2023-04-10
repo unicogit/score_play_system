@@ -1,6 +1,10 @@
 <template>
     <div>
-      <video ref="video" autoplay muted playsinline></video>
+      <video ref="video" 
+        autoplay muted playsinline 
+        width="800"
+        height="600"
+        :style="{ objectFit: 'contain' }"></video>
       <button
         v-if="!isRecording"
         class="ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -15,6 +19,12 @@
       >
         録画終了
       </button>
+      <button
+        class="ml-6 rounded-md border border-transparent bg-yellow-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+        @click="toggleCamera"
+        >
+        カメラ切り替え
+        </button>
       <a
             v-show="showDownloadLink"
             ref="downloadLink"
@@ -22,10 +32,18 @@
       >
         動画のダウンロード
       </a>
+      <button
+        class="ml-6 rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        @click="goBack"
+        >
+        戻る
+    </button>
     </div>
   </template>
   
   <script>
+  import { Inertia } from '@inertiajs/inertia'; // 追加: Inertia.js のインポート
+
   export default {
     data() {
       return {
@@ -34,6 +52,7 @@
         chunks: [],
         isRecording: false,
         showDownloadLink: false,
+        facingMode: "user", // 追加: カメラの向き (初期値は内向き)
       };
     },
     mounted() {
@@ -43,7 +62,9 @@
       async initializeCamera() {
         try {
           this.videoStream = await navigator.mediaDevices.getUserMedia({
-            video: true,
+            video: {
+                facingMode: this.facingMode, // 追加: カメラの向きを指定
+            },
             audio: true,
           });
   
@@ -52,6 +73,13 @@
           console.error("Error accessing camera:", error);
         }
       },
+      async toggleCamera() {
+            this.facingMode = this.facingMode === "user" ? "environment" : "user";
+            await this.initializeCamera();
+        },
+        goBack() {
+            Inertia.visit(document.referrer);
+        },
       startRecording() {
         this.isRecording = true;
         this.chunks = [];

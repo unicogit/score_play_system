@@ -3,10 +3,13 @@
         <div id="scorebox" class="reltive border-2">
             <form @submit.prevent="submitForm">
             <input type="file" ref="image" @change="previewImage" />
-            <img @click="onClickScore" v-if="preview" :src="preview" alt="Image Preview" />
+            <img @click="onClickScore" :src="preview" alt="Image Preview" class="image-preview" />
+            <canvas v-if="drawing" ref="canvas" :class="{ 'transparent-canvas': drawing }" @mousedown="startDrawing" @mousemove="draw" @mouseup="stopDrawing"></canvas>
             <!-- <button type="submit">アップロード</button> -->
             </form>
+            <!-- <button @click="toggleDrawing" type="button" class="rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">描画</button> -->
         </div>
+        
         <div class="videobox">
             <form @submit.prevent="submitFormVideo">
             <input type="file" ref="video" @change="previewVideo" />
@@ -40,11 +43,15 @@ export default {
         },
         timestamp: {
             type: Array,
+            default: () => [],
         },
         src : {
             type: String,
         },
-        practices: [],
+        practices:{
+            type: Array,
+            default: () => [], // デフォルト値を設定する
+        } 
     },
     data() {
         return {
@@ -61,6 +68,7 @@ export default {
             lineColor: "black",
             lineWidth: 5,
             initialized: false,
+            drawing: false,
         };
     },
     mounted() {
@@ -75,6 +83,7 @@ export default {
         this.image = event.target.files[0];
         this.preview = URL.createObjectURL(this.image);
         console.log(this.preview);
+        this.loadImageToCanvas();
         },
         async submitForm() {
         if (!this.image) return;
@@ -94,6 +103,36 @@ export default {
         } catch (error) {
             console.error("アップロード失敗", error);
         }
+        },
+
+        loadImageToCanvas() {
+            if (!this.preview) return;
+
+            const img = new Image();
+            img.src = this.preview;
+            img.onload = () => {
+            this.$refs.canvas.width = img.width;
+            this.$refs.canvas.height = img.height;
+            this.context = this.$refs.canvas.getContext("2d");
+            this.context.drawImage(img, 0, 0);
+            this.drawing = false;
+            };
+        },
+        toggleDrawing() {
+            this.drawing = !this.drawing;
+        },
+        startDrawing(event) {
+            this.drawing = true;
+            this.context.beginPath();
+            this.context.moveTo(event.offsetX, event.offsetY);
+        },
+        draw(event) {
+            if (!this.context || !this.drawing) return;
+            this.context.lineTo(event.offsetX, event.offsetY);
+            this.context.stroke();
+        },
+        stopDrawing() {
+            this.drawing = false;
         },
 
         previewVideo(event) {
@@ -120,6 +159,10 @@ export default {
         }
         },
         onClickScore(e) {
+            if (!this.timestamp.length) {
+                console.log('Timestamp array is empty');
+                return;
+            }
             const x = e.offsetX;
             const y = e.offsetY;
             console.log(x, y);
@@ -204,6 +247,14 @@ export default {
 
 <style>
 /* viewer用css */
+canvs,
+.image-preview {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  object-fit: contain;
+  z-index: 1;
+}
 #playbox {
     display: flex;
     flex-wrap: wrap;
@@ -218,9 +269,8 @@ export default {
     width: 60%;
     padding: 20px 10px;
 }
-canvas {
-    width: 40%;
-    padding: 20px 10px;
-    border: 1px solid black;
+.transparent-canvas {
+    z-index: 2;
+    opacity: 0.8;
 }
 </style>
