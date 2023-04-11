@@ -10,6 +10,7 @@ use App\Http\Controllers\PythonController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\RecordController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\GatherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,12 @@ Route::middleware([
 Route::get('/api/positions', [PlayViewController::class, 'fetchPositions'])->name('fetch.positions');
 
 Route::get('/playview', [PlayViewController::class, 'index']);
+
+Route::get('/gather', function () {
+    return view('gather');
+});
+
+Route::get('/gather', [GatherController::class, 'index']);
 
 Route::resource('/record', RecordController::class, ['names' => 'record']);
 Route::get('/record', [RecordController::class, 'index']);

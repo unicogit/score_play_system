@@ -34,7 +34,7 @@ export default {
         return {
             recording: false,
             videoavailable: false,
-            record_status: 'record start',
+            record_status: '録画開始',
         }
     },
     mounted() {
