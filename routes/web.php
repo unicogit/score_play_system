@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\CallenderController;
 use App\Http\Controllers\PlayViewController;
-use App\Http\Controllers\PracticesController;
 use App\Http\Controllers\PythonController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\RecordController;
