@@ -12,11 +12,11 @@ import axios from 'axios';
         <div v-show="videoavailable">
             <button v-on:click="download">録画をダウンロード</button><br>
             <button @click="upload">録画をアップロード</button>
-            <form :action="route('record.store')" method="post" enctype="multipart/form-data">
+            <!-- <form :action="route('record.store')" method="post" enctype="multipart/form-data">
                 <input type="text" name="title">
                 <input type="file" name="video" accept="video/mp4"><br>
                 <input type="submit" value="選択した動画をアップロード">
-            </form>
+            </form> -->
         </div>
 
         <div id="video-container">
@@ -61,6 +61,10 @@ export default {
             let status = e.message.status;
             this.recording = status;
         });
+        window.Echo.channel('multi_record').listen('UploadBlob', (e)=>{
+            console.log('UploadBlob');
+            console.log(e);
+        });
     },
     methods: {
         download: function(){
@@ -99,16 +103,29 @@ export default {
             });
         },
         upload: function(){
-            let blob = new Blob(chunks, {"type": 'video¥/mp4'})
-            let formData = new FormData();
-            formData.append('video', blob);
+            // let blob = new Blob(chunks, {"type": 'video¥/mp4'})
+            // let formData = new FormData();
+            // formData.append('video', blob);
 
-            axios.post(route('record.store'), formData)
+            // axios.post(route('record.store'), formData)
+            // .then(res=>{
+            //     console.log(res);
+            // })
+            // .catch(e=>{
+            //     console.log(e);
+            // });
+            let new_blob = 'recorded_video';
+            var params = {
+                'video': new_blob,
+            };
+            axios.post(route('record.store'), params)
             .then(res=>{
+                console.log('uploaded: ');
                 console.log(res);
             })
             .catch(e=>{
-                console.log(e);
+                console.log('upload error: ');
+                console.log(e.response);
             });
         },
     },

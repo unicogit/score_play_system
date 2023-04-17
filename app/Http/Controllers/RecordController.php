@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Events\RecordingStart;
+use App\Events\UploadBlob;
+use App\Library\Blob;
 use App\Library\RecordMessage;
 use App\Models\Practice;
 use Illuminate\Http\Request;
@@ -45,23 +47,30 @@ class RecordController extends Controller
      */
     public function store(Request $request)
     {
-        //remaining columns
-        //'time',
-        //'score',
-        //'output',
-        //$title = $request->input('title');
-        $video = $request->file('video');
-        $created_at = now()->timestamp;
-        //videosにstoreしながらパスを取得
-        $path = $video->store('public/videos');
-        $url = Storage::url($path);
+        $item = $request->input('video');
 
-        Practice::create([
-            ///'title' => $title,
-            'video' => $url,
-            'created_at' => $created_at,
-        ]);
-        return redirect(route('record.index'));
+        $blob = new Blob;
+        $blob->video = $item;
+
+        UploadBlob::dispatch($blob);
+        return $request;
+        // //remaining columns
+        // //'time',
+        // //'score',
+        // //'output',
+        // //$title = $request->input('title');
+        // $video = $request->file('video');
+        // $created_at = now()->timestamp;
+        // //videosにstoreしながらパスを取得
+        // $path = $video->store('public/videos');
+        // $url = Storage::url($path);
+
+        // Practice::create([
+        //     ///'title' => $title,
+        //     'video' => $url,
+        //     'created_at' => $created_at,
+        // ]);
+        // return redirect(route('record.index'));
     }
 
     /**
