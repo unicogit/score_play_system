@@ -47,30 +47,33 @@ class RecordController extends Controller
      */
     public function store(Request $request)
     {
-        $item = $request->input('video');
+        // $item = $request->input('video');
 
-        $blob = new Blob;
-        $blob->video = $item;
+        // $blob = new Blob;
+        // $blob->video = $item;
 
-        UploadBlob::dispatch($blob);
-        return $request;
-        // //remaining columns
-        // //'time',
-        // //'score',
-        // //'output',
-        // //$title = $request->input('title');
-        // $video = $request->file('video');
-        // $created_at = now()->timestamp;
-        // //videosにstoreしながらパスを取得
-        // $path = $video->store('public/videos');
-        // $url = Storage::url($path);
+        // UploadBlob::dispatch($blob);
+        // return $request;
+        //remaining columns
+        //'time',
+        //'score',
+        //'output',
+        //$title = $request->input('title');
+        $video = $request->file('video');
+        $title = $request->input('title');
+        $practice_date = $request->input('practice_date');
+        $created_at = now()->timestamp;
+        //videosにstoreしながらパスを取得
+        $path = $video->store('public/videos');
+        $url = Storage::url($path);
 
-        // Practice::create([
-        //     ///'title' => $title,
-        //     'video' => $url,
-        //     'created_at' => $created_at,
-        // ]);
-        // return redirect(route('record.index'));
+        Practice::create([
+            ///'title' => $title,
+            'video' => $url,
+            'title' => $title,
+            'practice_date' => $practice_date,
+            'created_at' => $created_at,
+        ]);
     }
 
     /**

@@ -103,30 +103,44 @@ export default {
             });
         },
         upload: function(){
-            // let blob = new Blob(chunks, {"type": 'video¥/mp4'})
-            // let formData = new FormData();
-            // formData.append('video', blob);
+            let blob = new Blob(chunks, {"type": 'video¥/mp4'})
+            let formData = new FormData();
+            let date = new Date();
+            formData.append('video', blob);
+            formData.append('title', 
+                'レッスン' 
+                + date.getFullYear() 
+                + (date.getMonth()+1) 
+                + date.getDate() 
+                + date.getHours() 
+                + date.getMinutes()
+            );
+            formData.append('practice_date', 
+                date.getFullYear() + '-' 
+                + (date.getMonth()+1) + '-' 
+                + date.getDate()
+            );
 
-            // axios.post(route('record.store'), formData)
-            // .then(res=>{
-            //     console.log(res);
-            // })
-            // .catch(e=>{
-            //     console.log(e);
-            // });
-            let new_blob = 'recorded_video';
-            var params = {
-                'video': new_blob,
-            };
-            axios.post(route('record.store'), params)
+            axios.post(route('record.store'), formData)
             .then(res=>{
-                console.log('uploaded: ');
                 console.log(res);
             })
             .catch(e=>{
-                console.log('upload error: ');
-                console.log(e.response);
+                console.log(e);
             });
+            // let new_blob = 'recorded_video';
+            // var params = {
+            //     'video': new_blob,
+            // };
+            // axios.post(route('record.store'), params)
+            // .then(res=>{
+            //     console.log('uploaded: ');
+            //     console.log(res);
+            // })
+            // .catch(e=>{
+            //     console.log('upload error: ');
+            //     console.log(e.response);
+            // });
         },
     },
     watch: {
