@@ -15,11 +15,11 @@ class UploadBlob implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $blob;
+    
 
-    public function __construct(Blob $blob)
+    public function __construct()
     {
-        $this->blob = $blob;
+        
     }
 
     /**

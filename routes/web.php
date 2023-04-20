@@ -65,10 +65,11 @@ Route::get('/gather', function () {
 
 Route::get('/gather', [GatherController::class, 'index']);
 
-Route::resource('/record', RecordController::class, ['names' => 'record']);
-Route::get('/record', [RecordController::class, 'index']);
-Route::post('/record/create', [RecordController::class, 'create']);
-Route::post('/record/destroy', [RecordController::class, 'destroy']);
+// Route::resource('/record', RecordController::class, ['names' => 'record']);
+Route::get('/record', [RecordController::class, 'index'])->name('record');
+Route::post('/record/create', [RecordController::class, 'create'])->name('record.create');
+Route::post('/record/store', [RecordController::class, 'store'])->name('record.store');
+Route::post('/record/upload', [RecordController::class, 'upload'])->name('record.upload');
 
 Route::resource('/upload', UploadController::class, ['names' => 'upload']);
 Route::get('/upload', [UploadController::class, 'index']);
