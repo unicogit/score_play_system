@@ -23,7 +23,7 @@ use App\Http\Controllers\GatherController;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Index', [
+    return Inertia::render('Callender', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,

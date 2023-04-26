@@ -34,13 +34,22 @@ import SideBar from '@/Components/SideBar.vue'
 </script>
 <script>
  export default {
-                props: {
-                    practices:{
-                        type: Array
-                    }
-                },
-                data(){
-                    return null
-                }
-            }
+    props: {
+        practices:{
+                type: Array,
+        },
+        data: {
+            type: Array,
+        },
+        user: {
+            type: Array,
+        },
+    },
+    mounted() {
+        this.user = window.Jetstream.inertia.user;
+    },
+    data(){
+        return null
+    },
+}
 </script>
