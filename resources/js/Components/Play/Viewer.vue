@@ -1,23 +1,51 @@
 <template>
     <div id="playbox">
-        <div @click="onClickScore" id="scorebox" class="reltive border-2">
-            <img :src="imgSrc" />
+        <div id="scorebox" class="reltive border-2">
+            {{ currentImage }}
+                <img
+                @click="onClickScore"
+                :src="currentImage || preview"
+                alt="Image Preview"
+                class="image-preview"
+            />
+            <canvas
+                v-if="drawing"
+                ref="canvas"
+                :class="{ 'transparent-canvas': drawing }"
+                @mousedown="startDrawing"
+                @mousemove="draw"
+                @mouseup="stopDrawing"
+            ></canvas>
+            <!-- <button type="submit">アップロード</button> -->
+            <!-- <button @click="toggleDrawing" type="button" class="rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">描画</button> -->
         </div>
+        
         <div class="videobox">
+            <form @submit.prevent="submitFormVideo">
+            <input type="file" ref="video" @change="previewVideo" />
             <video
-                ref="video"
                 id="video"
                 width="400"
                 height="300"
                 controls
                 autobuffer
             >
-                <source :src="videoSrc" />
+                <source v-if="videoview" :src="videoview" />
             </video>
+            </form>
+            <div class="ml-6 h-6 w-px bg-gray-300" />
+            <a href='/recording'>
+            <button type="button" class="ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">単体録画</button>
+            </a>
+            <a href='/record'>
+            <button type="button" class="ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">同時録画</button>
+            </a>
         </div>
     </div>
 </template>
 <script>
+import axios from "axios";
+
 export default {
     props: {
         points: {
@@ -25,20 +53,150 @@ export default {
         },
         timestamp: {
             type: Array,
+            default: () => [],
         },
+        src : {
+            type: String,
+        },
+        practices:{
+            type: Array,
+            default: () => [], // デフォルト値を設定する
+        } 
     },
     data() {
         return {
             imgSrc: "/scores/kirakira.png",
-            videoSrc: "/videos/MVI_25.mp4",
+            // videoSrc: "/videos/MVI_25.mp4",
+            videoSrc: this.src,
+            isPlaying: false,
+            image: null,
+            imageLoaded: false,
+            uploadedImage: "",
+            preview: "",
+            videoview: "",
+            context: null,
+            lineColor: "black",
+            lineWidth: 5,
+            initialized: false,
+            drawing: false,
+            currentPageIndex: 0,
+            imagePaths: [],
         };
     },
-    computed: {},
+    computed: {
+    currentImage() {
+      if (this.practices.length) {
+        return this.practices[this.currentPageIndex].score.image_path;
+      }
+      return "";
+    },
+    },
+    mounted() {
+        this.$watch("uploadedImage", (newImage) => {
+            if (newImage) {
+                this.initializeCanvas();
+            }
+        });
+    },
     methods: {
+        
+        previewImage(event) {
+        this.image = event.target.files[0];
+        this.preview = URL.createObjectURL(this.image);
+        console.log(this.preview);
+        this.loadImageToCanvas();
+        },
+        async submitForm() {
+        if (!this.image) return;
+
+        const formData = new FormData();
+        formData.append("image", this.image);
+
+        try {
+            const response = await axios.post("/upload-image", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            });
+
+            this.uploadedImage = response.data.path; // 追加
+            console.log("アップロード成功", response.data);
+        } catch (error) {
+            console.error("アップロード失敗", error);
+        }
+        },
+        nextPage() {
+        if (this.currentPageIndex < this.practices.length - 1) {
+            this.currentPageIndex++;
+        }
+        },
+        prevPage() {
+        if (this.currentPageIndex > 0) {
+            this.currentPageIndex--;
+        }
+        },
+
+        loadImageToCanvas() {
+            if (!this.preview) return;
+
+            const img = new Image();
+            img.src = this.preview;
+            img.onload = () => {
+            this.$refs.canvas.width = img.width;
+            this.$refs.canvas.height = img.height;
+            this.context = this.$refs.canvas.getContext("2d");
+            this.context.drawImage(img, 0, 0);
+            this.drawing = false;
+            };
+        },
+        toggleDrawing() {
+            this.drawing = !this.drawing;
+        },
+        startDrawing(event) {
+            this.drawing = true;
+            this.context.beginPath();
+            this.context.moveTo(event.offsetX, event.offsetY);
+        },
+        draw(event) {
+            if (!this.context || !this.drawing) return;
+            this.context.lineTo(event.offsetX, event.offsetY);
+            this.context.stroke();
+        },
+        stopDrawing() {
+            this.drawing = false;
+        },
+
+        previewVideo(event) {
+        const video = event.target.files[0];
+        this.videoview = URL.createObjectURL(video);
+        console.log(this.videoview);
+        },
+        async submitFormVideo() {
+        if (!this.video) return;
+
+        const formData = new FormData();
+        formData.append("video", this.video);
+        try {
+            const response = await axios.post("/upload-video", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            });
+
+            this.uploadedVideo = response.data.path; // 追加
+            console.log("アップロード成功", response.data);
+        } catch (error) {
+            console.error("アップロード失敗", error);
+        }
+        },
         onClickScore(e) {
+            if (!this.timestamp.length) {
+                console.log('Timestamp array is empty');
+                return;
+            }
             const x = e.offsetX;
             const y = e.offsetY;
-            // console.log(x, y);
+            console.log(x, y);
 
             const points = [];
             const timestamp = this.timestamp;
@@ -99,15 +257,35 @@ export default {
         },
         onClickMeasure(index) {
             const media = this.$refs.video;
-            media.currentTime = this.timestamp[index][1] + 8;
+            console.log(this.timestamp[index][1]+7.5)
+            media.currentTime = this.timestamp[index][1] + 7.5;
             media.play();
         },
+        togglePlayback(){
+            this.isPlaying = !this.isPlaying
+            this.$refs.video.forEach(video => {
+                if (this.isPlaying) {
+                video.play()
+                } else {
+                video.pause()
+                }
+            })
+        }
     },
+    
 };
 </script>
 
 <style>
 /* viewer用css */
+canvs,
+.image-preview {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  object-fit: contain;
+  z-index: 1;
+}
 #playbox {
     display: flex;
     flex-wrap: wrap;
@@ -121,5 +299,9 @@ export default {
 .videobox {
     width: 60%;
     padding: 20px 10px;
+}
+.transparent-canvas {
+    z-index: 2;
+    opacity: 0.8;
 }
 </style>

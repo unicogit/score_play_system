@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->date('practice_date')->nullable();
             $table->time('time')->nullable();
+            $table->unsignedBigInteger('score_id')->nullable();
+            $table->foreign('score_id')->references('id')->on('scores')->onDelete('cascade');
             $table->string('video')->nullable();
-            $table->string('score')->nullable();
-            $table->string('output')->nullable();
             $table->timestamps();
         });
     }

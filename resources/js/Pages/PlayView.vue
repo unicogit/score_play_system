@@ -14,9 +14,11 @@
         <main>
             <div class="py-6">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                    <!-- Replace with your content -->
-                    <PlayView :points="points" :timestamp="timestamp" />
-                    <!-- /End replace -->
+                    <PlayView
+                        :practices="practices"
+                        :points="points"
+                        :timestamp="timestamp"
+                    />
                 </div>
             </div>
         </main>
@@ -26,10 +28,10 @@
 <script>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Welcome from '@/Components/Welcome.vue';
-import Header from '@/Components/Header.vue'
+import Header from '@/Components/header.vue'
 import SideBar from '@/Components/SideBar.vue'
 import { Head, Link } from '@inertiajs/inertia-vue3';
-import PlayView from '@/components/Play/Viewer.vue';
+import PlayView from '@/Components/Play/Viewer.vue';
 import axios from 'axios'
 
 export default {
@@ -39,6 +41,9 @@ export default {
         Header,
         SideBar,
         PlayView,
+    },
+    props:{
+        practices: [],
     },
     data() {
         return {
@@ -57,5 +62,8 @@ export default {
                 console.log('err: ', err)
             });
     },
+    methods: {
+        
+    }
 }
 </script>

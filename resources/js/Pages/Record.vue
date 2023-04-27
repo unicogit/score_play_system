@@ -1,5 +1,6 @@
 <script setup>
-import { Head } from '@inertiajs/inertia-vue3'
+import { Head } from '@inertiajs/inertia-vue3';
+import axios from 'axios';
 </script>
 <template>
     <Head>
@@ -7,11 +8,15 @@ import { Head } from '@inertiajs/inertia-vue3'
         <link rel="stylesheet" href='css/record.css'>
     </Head>
     <div id="app">
-        <button v-on:click="recording = !recording">record</button>
+        <button @click="broadcast">{{ record_status }}</button>
         <div v-show="videoavailable">
-            <button v-on:click="download">download</button>
-            <form action="{{ url('/record/send') }}"></form>
-            <button v-on:click="upload">upload</button>
+            <button v-on:click="download">録画をダウンロード</button><br>
+            <button @click="upload">録画をアップロード</button>
+            <form :action="route('record.store')" method="post" enctype="multipart/form-data">
+                <input type="text" name="title">
+                <input type="file" name="video" accept="video/mp4"><br>
+                <input type="submit" value="選択した動画をアップロード">
+            </form>
         </div>
 
         <div id="video-container">
@@ -25,9 +30,17 @@ var recorder = null;
 var chunks = []
 export default {
     name: 'app',
+    data: function(){
+        return {
+            recording: false,
+            videoavailable: false,
+            record_status: '録画開始',
+        }
+    },
     mounted() {
         //カメラにアクセスする処理
         var video = document.getElementById('video');
+        video.volume = 0;
         navigator.mediaDevices.getUserMedia(constrains)
         .then(function(stream) {
             video.srcObject = stream // streamはユーザーのカメラとマイクの情報で、これをvideoの入力ソースにする
@@ -41,13 +54,13 @@ export default {
         })
         .catch(function(err) {
             console.log("An error occured! " + err)
-        })
-    },
-    data: function(){
-        return {
-            recording: false,
-            videoavailable: false,
-        }
+        });
+        window.Echo.channel('multi_record').listen('RecordingStart', (e)=>{
+            console.log('RecordingStart');
+            console.log(e);
+            let status = e.message.status;
+            this.recording = status;
+        });
     },
     methods: {
         download: function(){
@@ -66,19 +79,50 @@ export default {
             a.click()
             window.URL.revokeObjectURL(url)
         },
+        toggle_record: function(){
+            this.recording = !this.recording
+        },
+        broadcast: function(){
+            //console.log('broadcast');
+            let toggled_status = !this.recording;
+            var params = {
+                'status': toggled_status,
+            };
+            axios.post(route('record.create'), params)
+            .then(res=>{
+                console.log('create');
+                console.log(res);
+            })
+            .catch(e=>{
+                console.log('broadcast error');
+                console.log(e.response);
+            });
+        },
         upload: function(){
-            fetch('')
-        }
+            let blob = new Blob(chunks, {"type": 'video¥/mp4'})
+            let formData = new FormData();
+            formData.append('video', blob);
+
+            axios.post(route('record.store'), formData)
+            .then(res=>{
+                console.log(res);
+            })
+            .catch(e=>{
+                console.log(e);
+            });
+        },
     },
     watch: {
         recording: function(newVal){
             if(newVal){
                 //record start
-                recorder.start()
+                recorder.start();
+                this.record_status = '撮影終了';
             }else{
                 //record stop
-                recorder.stop()
-                this.videoavailable = true
+                recorder.stop();
+                this.videoavailable = true;
+                this.record_status = '撮影開始';
             }
         }
     }

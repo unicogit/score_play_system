@@ -1,91 +1,76 @@
 <template>
-    <div class="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
-        <!-- Sidebar component, swap this element with another sidebar if you like -->
-        <div class="flex flex-grow flex-col overflow-y-auto bg-indigo-50 pt-5">
-            <div class="flex flex-shrink-0 items-center px-4">
-                <img
-                    class="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=300"
-                    alt="SCPS"
-                />
-            </div>
-            <div class="mt-5 flex flex-1 flex-col">
-                <nav class="flex-1 space-y-1 bg-white px-2" aria-label="Sidebar">
-                    <template v-for="item in navigation" :key="item.name">
-                        <div v-if="!item.children">
-                            <a
-                                :href="item.href"
-                                :class="[
-                                    item.current
-                                        ? 'bg-gray-100 text-gray-900'
-                                        : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                                    'group w-full flex items-center pl-7 pr-2 py-2 text-sm font-medium rounded-md'
-                                ]"
-                                >{{ item.name }}</a
-                            >
-                        </div>
-                        <Disclosure as="div" v-else class="space-y-1" v-slot="{ open }">
-                            <DisclosureButton
-                                :class="[
-                                    item.current
-                                        ? 'bg-gray-100 text-gray-900'
-                                        : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                                    'group w-full flex items-center pr-2 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500'
-                                ]"
-                            >
-                                <svg
-                                    :class="[
-                                        open ? 'text-gray-400 rotate-90' : 'text-gray-300',
-                                        'mr-2 h-5 w-5 flex-shrink-0 transform transition-colors duration-150 ease-in-out group-hover:text-gray-400'
-                                    ]"
-                                    viewBox="0 0 20 20"
-                                    aria-hidden="true"
-                                >
-                                    <path d="M6 6L14 10L6 14V6Z" fill="currentColor" />
-                                </svg>
-                                {{ item.name }}
-                            </DisclosureButton>
-                            <DisclosurePanel class="space-y-1">
-                                <DisclosureButton
-                                    v-for="subItem in item.children"
-                                    :key="subItem.name"
-                                    as="a"
-                                    :href="subItem.href"
-                                    class="group flex w-full items-center rounded-md py-2 pl-10 pr-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                                    >{{ subItem.name }}</DisclosureButton
-                                >
-                            </DisclosurePanel>
-                        </Disclosure>
-                    </template>
-                </nav>
-            </div>
+    <!-- <div class="relative"> -->
+    <div>
+        <button @click="$emit('updateOpen', !open)" class="bg-white p-2 rounded-md text-gray-500 z-30">
+  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+  </svg>
+</button>
+    </div>
+    <div :class="{'hidden': !props.open, 'fixed md:static top-0 bottom-0 right-0 md:flex md:w-64 md:flex-col': true}">
+        <div class="flex-grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
+          <div class="flex h-16 shrink-0 items-center">
+            <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
+          </div>
+          <nav class="flex flex-1 flex-col">
+            <ul role="list" class="flex flex-1 flex-col gap-y-7">
+              <li>
+                <ul role="list" class="-mx-2 space-y-1">
+                  <li v-for="item in navigation" :key="item.name">
+                    <a :href="item.href" :class="[item.current ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
+                      <component :is="item.icon" :class="[item.current ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600', 'h-6 w-6 shrink-0']" aria-hidden="true" />
+                      {{ item.name }}
+                      <span v-if="item.count" class="ml-auto w-9 min-w-max whitespace-nowrap rounded-full bg-white px-2.5 py-0.5 text-center text-xs font-medium leading-5 text-gray-600 ring-1 ring-inset ring-gray-200" aria-hidden="true">{{ item.count }}</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
         </div>
     </div>
-</template>
+  <!-- </div> -->
+
+  </template>
 
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
+import { useWindowSize } from '../hooks/useWindowSize'
 var currentpath = location.pathname;
-let home,register,viewer = false;
+let home,register,viewer, playview = false;
+const props = defineProps({
+  open: Boolean
+});
+
+const emit = defineEmits({
+  updateOpen: (value) => true
+});
 
 if (currentpath=='/callender'){
   home = true
-  register,viewer = false;
+  register,viewer,playview = false;
 }
 if (currentpath=='/practice_register'){
   register = true
-  home,viewer = false;
+  home,viewer,playview = false;
 }
-if (currentpath=='/viewer'){
+if (currentpath=='/scores'){
   viewer = true
-  register,home = false;
+  register,home,playview = false;
+}
+if (currentpath=='playview'){
+    home,register,viewer= false;
 }
 
 const navigation = [
   { name: 'ホーム', href: '/callender', current: home },
-  { name: '新規練習登録', href: '/callender/create', current: register },
-  { name: '動画再生ビュアー', href: '/playview', current: viewer },
+  { name: '楽譜登録', href: '/score', current: viewer },
+  { name: '新規レッスン登録', href: '/callender/create', current: register },
 ]
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+ .hidden {
+    display: none;
+  }
+</style>

@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\RecordingStart;
+use App\Library\RecordMessage;
 use App\Models\Practice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class RecordController extends Controller
 {
@@ -14,7 +18,7 @@ class RecordController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Record');
     }
 
     /**
@@ -22,9 +26,15 @@ class RecordController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $status = $request->input('status');
+
+        $message = new RecordMessage;
+        $message->status = $status;
+        //送信者を含めてメッセージを送信
+        RecordingStart::dispatch($message);
+        return $request;
     }
 
     /**
@@ -35,7 +45,23 @@ class RecordController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //remaining columns
+        //'time',
+        //'score',
+        //'output',
+        //$title = $request->input('title');
+        $video = $request->file('video');
+        $created_at = now()->timestamp;
+        //videosにstoreしながらパスを取得
+        $path = $video->store('public/videos');
+        $url = Storage::url($path);
+
+        Practice::create([
+            ///'title' => $title,
+            'video' => $url,
+            'created_at' => $created_at,
+        ]);
+        return redirect(route('record.index'));
     }
 
     /**
@@ -81,5 +107,7 @@ class RecordController extends Controller
     public function destroy($id)
     {
         //
+        event(new RecordingStart(false));
+        return redirect()->back()->with('success', 'end');
     }
 }
