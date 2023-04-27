@@ -18,9 +18,12 @@ class RecordController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($userID, $lessonName)
     {
-        return Inertia::render('Record');
+        return Inertia::render('Record', [
+            'userID' => $userID,
+            'lessonName' => $lessonName,
+        ]);
     }
 
     /**

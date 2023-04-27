@@ -9,13 +9,12 @@
       <button @click="createURL">QRコードを生成</button>
       <canvas id="qr-code-wrapper">
       </canvas>
-      <button @click="showQRCode = true">Show QR Code</button>
     </div>
     <div v-if="isGenerated" id="camera-control-wrapper">
-      <button @click="bcToggleRecording" >撮影ボタン</button><br>
+      <button @click="bcToggleRecording" >撮影{{ ctlrButton }}</button><br>
       <button v-if="isRecorded" @click="bcUpload">アップロード</button>
       <br>
-      <a href="/record">録画画面へ移動</a>
+      <a :href="qrCodeUrl">録画画面へ移動</a>
     </div>
   </template>
   
@@ -42,6 +41,9 @@
         qrCodeUrl: '',
         isGenerated: false,
         isRecorded: false,
+        status: '開始',
+        onRec: false,
+        ctlrButton: '開始',
       }
     },
     mounted() {
@@ -49,7 +51,9 @@
     },
     methods: {
       createURL(){
-        this.qrCodeUrl = 'https://scoreplaysystem.unico-unique.com/record/' + this.user.name + '/' + this.lessonName;
+        // this.qrCodeUrl = 'https://scoreplaysystem.unico-unique.com/record/' + this.user.id + '/' + this.lessonName;
+        this.qrCodeUrl = '/record/' + this.user.id + '/' + this.lessonName;
+
         var qrWrapper = document.getElementById('qr-code-wrapper');
         
         const qr = new QRious({
@@ -63,7 +67,33 @@
       bcToggleRecording(){
         //TODO 撮影中なら撮影を終了し、それ以外なら撮影を開始するbcメッセージを送信
         this.isRecorded = true;
-      }
+        this.onRec = !this.onRec;
+        this.status = this.onRec? '開始' : '終了';
+        this.ctlrButton = this.onRec ? '終了' : '開始';
+        var params = {
+            'status': this.status,
+        };
+        axios.post(route('record.create'), params)
+        .then(res=>{
+            console.log('create' + params);
+            console.log(res);
+        })
+        .catch(e=>{
+            console.log('broadcast error');
+            console.log(e.response);
+        });
+      },
+      bcUpload: function(){
+        axios.post(route('record.upload'))
+        .then(res=>{
+            console.log('uploaded: ');
+            console.log(res);
+        })
+        .catch(e=>{
+            console.log('upload error: ');
+            console.log(e.response);
+        });
+      },
     }
   }
   </script>
