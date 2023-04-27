@@ -16,7 +16,7 @@ class CallenderController extends Controller
             return Inertia::render(
                 'Callender',
                 [
-                    'practices'=>$practices
+                    'practices'=>$practices,
                 ]
             );  
     }

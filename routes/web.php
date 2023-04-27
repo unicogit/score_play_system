@@ -23,7 +23,7 @@ use App\Http\Controllers\GatherController;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Index', [
+    return Inertia::render('Callender', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
@@ -66,7 +66,7 @@ Route::get('/gather', function () {
 Route::get('/gather', [GatherController::class, 'index']);
 
 // Route::resource('/record', RecordController::class, ['names' => 'record']);
-Route::get('/record', [RecordController::class, 'index'])->name('record');
+Route::get('/record/{userID}/{lessonName}', [RecordController::class, 'index'])->name('record');
 Route::post('/record/create', [RecordController::class, 'create'])->name('record.create');
 Route::post('/record/store', [RecordController::class, 'store'])->name('record.store');
 Route::post('/record/upload', [RecordController::class, 'upload'])->name('record.upload');
