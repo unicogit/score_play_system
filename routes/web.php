@@ -32,10 +32,10 @@ Route::get('/', function () {
     ]);
 });
 
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->name('dashboard');
-// Route::redirect('/dashboard', '/callender');
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->name('dashboard');
+Route::redirect('/dashboard', '/callender');
 
 Route::middleware([
     'auth:sanctum',
