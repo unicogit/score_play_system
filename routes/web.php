@@ -32,10 +32,10 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->name('dashboard');
-Route::redirect('/dashboard', '/callender');
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->name('dashboard');
+// Route::redirect('/dashboard', '/callender');
 
 Route::middleware([
     'auth:sanctum',
@@ -65,7 +65,13 @@ Route::middleware([
         return Inertia::render('Playview');
     })->name('Playview');
     Route::get('/python', [PythonController::class, 'python']);
+    Route::get('/gather', [GatherController::class, 'index']);
 
+// Route::resource('/record', RecordController::class, ['names' => 'record']);
+    Route::get('/record/{userID}/{lessonName}', [RecordController::class, 'index'])->name('record');
+    Route::post('/record/create', [RecordController::class, 'create'])->name('record.create');
+    Route::post('/record/store', [RecordController::class, 'store'])->name('record.store');
+    Route::post('/record/upload', [RecordController::class, 'upload'])->name('record.upload');
     Route::resource('/upload', UploadController::class, ['names' => 'upload']);
     Route::get('/upload', [UploadController::class, 'index']);
 

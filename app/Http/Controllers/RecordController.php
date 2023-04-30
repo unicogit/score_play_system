@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Events\RecordingStart;
+use App\Events\UploadBlob;
+use App\Library\Blob;
 use App\Library\RecordMessage;
 use App\Models\Practice;
 use Illuminate\Http\Request;
@@ -16,9 +18,12 @@ class RecordController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($userID, $lessonName)
     {
-        return Inertia::render('Record');
+        return Inertia::render('Record', [
+            'userID' => $userID,
+            'lessonName' => $lessonName,
+        ]);
     }
 
     /**
@@ -45,12 +50,21 @@ class RecordController extends Controller
      */
     public function store(Request $request)
     {
+        // $item = $request->input('video');
+
+        // $blob = new Blob;
+        // $blob->video = $item;
+
+        // UploadBlob::dispatch($blob);
+        // return $request;
         //remaining columns
         //'time',
         //'score',
         //'output',
         //$title = $request->input('title');
         $video = $request->file('video');
+        $title = $request->input('title');
+        $practice_date = $request->input('practice_date');
         $created_at = now()->timestamp;
         //videosにstoreしながらパスを取得
         $path = $video->store('public/videos');
@@ -59,9 +73,10 @@ class RecordController extends Controller
         Practice::create([
             ///'title' => $title,
             'video' => $url,
+            'title' => $title,
+            'practice_date' => $practice_date,
             'created_at' => $created_at,
         ]);
-        return redirect(route('record.index'));
     }
 
     /**
@@ -93,21 +108,8 @@ class RecordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function upload()
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-        event(new RecordingStart(false));
-        return redirect()->back()->with('success', 'end');
+        UploadBlob::dispatch();
     }
 }
