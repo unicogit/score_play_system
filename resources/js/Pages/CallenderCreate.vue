@@ -1,21 +1,14 @@
 <template>
-    <div>
-        <SideBar />
-        <div class="flex flex-1 flex-col md:pl-64">
-            <div class="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">
-                <div class="flex flex-1 justify-between px-4">
-                    <div class="flex flex-1">
-                        <Header />
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="flex flex-col h-screen">
+    <div class="flex flex-1">
+        <SideBar  :open="open" @update-open="toggleMenu" />
+      <div v-show="open" @click="toggleMenu" class="fixed inset-0 bg-black opacity-25 md:hidden z-10"></div>
         <div class="flex flex-1 flex-col md:pl-64">
             <main>
                 <div class="py-6">
                     <div class="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
                         <PracticeCreate
-                            :practice="practice"
+                            :scores="scores"
                             @submitted="createPractice"
                         ></PracticeCreate>
                     </div>
@@ -23,25 +16,28 @@
             </main>
         </div>
     </div>
+    </div>
 </template>
 <script setup>
 import SideBar from '@/Components/SideBar.vue'
 import PracticeCreate from '@/Components/Callender/Create.vue'
-import { ref } from 'vue'
-
-
+import { ref, computed } from 'vue'
+const open = ref(false)
+const toggleMenu = () => {
+  open.value = !open.value;
+}
 const createPractice = (formData) => {
     formData.post(route('callender.store'))
 }
 
-const sidebarOpen = ref(false)
 </script>
 <script>
 export default {
     props: {
-        practice: {
-            type: Array
-        }
+        scores: {
+            type: Array,
+            default: () => [],
+        },
     },
     methods: {
         createPractice(formData) {

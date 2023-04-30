@@ -1,12 +1,22 @@
 <template>
     <div id="playbox">
         <div id="scorebox" class="reltive border-2">
-            <form @submit.prevent="submitForm">
-            <input type="file" ref="image" @change="previewImage" />
-            <img @click="onClickScore" :src="preview" alt="Image Preview" class="image-preview" />
-            <canvas v-if="drawing" ref="canvas" :class="{ 'transparent-canvas': drawing }" @mousedown="startDrawing" @mousemove="draw" @mouseup="stopDrawing"></canvas>
+            {{ currentImage }}
+                <img
+                @click="onClickScore"
+                :src="currentImage || preview"
+                alt="Image Preview"
+                class="image-preview"
+            />
+            <canvas
+                v-if="drawing"
+                ref="canvas"
+                :class="{ 'transparent-canvas': drawing }"
+                @mousedown="startDrawing"
+                @mousemove="draw"
+                @mouseup="stopDrawing"
+            ></canvas>
             <!-- <button type="submit">アップロード</button> -->
-            </form>
             <!-- <button @click="toggleDrawing" type="button" class="rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">描画</button> -->
         </div>
         
@@ -69,7 +79,17 @@ export default {
             lineWidth: 5,
             initialized: false,
             drawing: false,
+            currentPageIndex: 0,
+            imagePaths: [],
         };
+    },
+    computed: {
+    currentImage() {
+      if (this.practices.length) {
+        return this.practices[this.currentPageIndex].score.image_path;
+      }
+      return "";
+    },
     },
     mounted() {
         this.$watch("uploadedImage", (newImage) => {
@@ -79,6 +99,7 @@ export default {
         });
     },
     methods: {
+        
         previewImage(event) {
         this.image = event.target.files[0];
         this.preview = URL.createObjectURL(this.image);
@@ -102,6 +123,16 @@ export default {
             console.log("アップロード成功", response.data);
         } catch (error) {
             console.error("アップロード失敗", error);
+        }
+        },
+        nextPage() {
+        if (this.currentPageIndex < this.practices.length - 1) {
+            this.currentPageIndex++;
+        }
+        },
+        prevPage() {
+        if (this.currentPageIndex > 0) {
+            this.currentPageIndex--;
         }
         },
 

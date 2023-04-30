@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use \App\Models\Practice;
+use \App\Models\Scores;
 
 class PracticeController extends Controller
 {
@@ -24,27 +25,29 @@ class PracticeController extends Controller
     // }
     public function create()
     {
-        $practice = Practice::get();
+        $scores = Scores::get();
+        dd($scores); // デバッグ用
         return Inertia::render(
-            
-            'PracticeCreate',
+        
+            'CallenderCreate',
             [
-                'practice'=>$practice,
+                'scores'=>$scores,
             ]
         );
     }
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'id' => '',
-            'title' => '',
-            'practice_date' => '',
-            'video' => '',
-            'score' => '',
-        ],[
+            'title' => 'required|string|max:255',
+            'practice_date' => 'required|date',
+            'score_id' => 'nullable|exists:scores,id',
+        ], [
             'title.required' => 'タイトルを入力してください。',
+            'practice_date.required' => '練習日を入力してください。',
         ]);
+    
         Practice::create($validated);
+    
         return redirect()->route('callender.index');
     }
 

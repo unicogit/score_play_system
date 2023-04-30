@@ -9,12 +9,15 @@ class Practice extends Model
 {
     use HasFactory;
     protected $fillable = [
-    'id',
-    'title',
-    'practice_date',
-    'time',
-    'video',
-    'score',
-    'output',
+        'id',
+        'title',
+        'practice_date',
+        'time',
+        'score_id',
+        'video',
     ];
+    public function scores()
+    {
+        return $this->belongsTo(Scores::class);
+    }
 }

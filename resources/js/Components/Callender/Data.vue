@@ -44,9 +44,12 @@
               </transition>
             </Menu>
             <div class="ml-6 h-6 w-px bg-gray-300" />
-            <a :href="route('callender.create')">
-            <button type="button" class="ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">練習登録</button>
-          </a>
+            <!-- <a :href="route('callender.create')">
+            <button type="button" class="ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">レッスン登録</button>
+            </a> -->
+              <a :href="route('callender.create')">
+            <button type="button" @click="openPracticeStartModal" class="ml-3 rounded-md border border-transparent bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">練習開始</button>
+              </a>
           </div>
           <Menu as="div" class="relative ml-6 md:hidden">
             <MenuButton class="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500">
@@ -156,28 +159,6 @@
   import { Link } from '@inertiajs/inertia-vue3'
   import { ref } from 'vue'
   import { watchEffect } from 'vue'
-//   const date = new Date()
-//   const year = date.getFullYear();
-//   const month = date.getMonth() + 1;
-//   const startDate = new Date(year, month - 1, 1) // 月の最初の日を取得
-//   const endDate = new Date(year, month,  0) // 月の最後の日を取得
-//   const endDayCount = endDate.getDate() // 月の末日
-//   const startDay = startDate.getDay()
-//   const days = []
-//   console.log(endDayCount)
-//   const maxday = parseInt(endDayCount);
-//   for (let i= 1; i <= maxday; i++){
-//     days.push({date:i})
-//   }
-//   console.log(days)
-//   const day=[
-//       { date: year+'-'+month+'-'+startDay+1}
-//   ]
-
-//   function prev(){
-//     showDate.setMonth(showDate.getMonth() - 1);
-//     showProcess(showDate);
-// }
 
 const date = ref(new Date())
 const year = ref(date.value.getFullYear())
