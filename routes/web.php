@@ -23,7 +23,7 @@ use App\Http\Controllers\GatherController;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Callender', [
+    return Inertia::render('Home', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
@@ -55,7 +55,6 @@ Route::middleware([
     })->name('Playview');
     Route::get('/python', [PythonController::class, 'python']);
 });
-Route::get('/api/positions', [PlayViewController::class, 'fetchPositions'])->name('fetch.positions');
 
 Route::get('/playview', [PlayViewController::class, 'index']);
 
@@ -78,6 +77,10 @@ Route::post('/upload-image', [ImageController::class, 'store'])->name('upload-im
 Route::post('/upload-video', [ImageController::class, 'store'])->name('upload-video');
 Route::get('/images', [ImageController::class, 'index'])->name('images');
 
+Route::get('/practices/create', [PracticeController::class, 'create'])->name('practices.create');
+
+
+Route::get('/api/positions', [PlayViewController::class, 'fetchPositions'])->name('fetch.positions');
 Route::get('/recording', function () {
     return Inertia::render('SimpleRecord');
 });
