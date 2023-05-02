@@ -103,9 +103,9 @@
               <!-- :class="day.isToday ? 'flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white' : undefined" -->
               <time :datetime="day.date">{{ day.date }}</time>
               <ol class="mt-2">
-                <li v-for="practice in practices" :key="practice.id">
+                <li v-for="practice in practices" :key="practice.title">
                   <!-- <Link v-if="practice.practice_date == year+'-'+('0'+month).slice(-2)+'-'+('0'+day.date).slice(-2)" href="/playview" class="group flex"> -->
-                  <Link v-if="practice.practice_date == year+'-'+('0'+month).slice(-2)+'-'+('0'+day.date).slice(-2)" :href="route('callender.show', { id: practice.id })" class="group flex">
+                  <Link v-if="practice.practice_date == year+'-'+('0'+month).slice(-2)+'-'+('0'+day.date).slice(-2)" :href="route('callender.show', practice.title)" class="group flex">
                     <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">
                       {{ practice.title }}
                     </p>
@@ -118,7 +118,7 @@
           </div>
           <div class="isolate grid w-full grid-cols-7 grid-rows-6 gap-px lg:hidden">
             <!-- :class="[day.isCurrentMonth ? 'bg-white' : 'bg-gray-50', (day.isSelected || day.isToday) && 'font-semibold', day.isSelected && 'text-white', !day.isSelected && day.isToday && 'text-indigo-600', !day.isSelected && day.isCurrentMonth && !day.isToday && 'text-gray-900', !day.isSelected && !day.isCurrentMonth && !day.isToday && 'text-gray-500', 'flex h-14 flex-col py-2 px-3 hover:bg-gray-100 focus:z-10']" -->
-            <button v-for="practice in practices" :key="practice.id" type="button" >
+            <button v-for="practice in practices" :key="practice.title" type="button" >
               <!-- :class="[day.isSelected && 'flex h-6 w-6 items-center justify-center rounded-full', day.isSelected && day.isToday && 'bg-indigo-600', day.isSelected && !day.isToday && 'bg-gray-900', 'ml-auto']" -->
               <time :datetime="practice.practice_date">{{ practice.practice_date.split('-').pop().replace(/^0/, '') }}</time>
               <span class="sr-only">{{ practice.title }}</span>
@@ -131,7 +131,7 @@
       </div>
       <div class="py-10 px-4 sm:px-6 lg:hidden">
         <ol class="divide-y divide-gray-100 overflow-hidden rounded-lg bg-white text-sm shadow ring-1 ring-black ring-opacity-5">
-          <li v-for="practice in practices" :key="practice.id" class="group flex p-4 pr-6 focus-within:bg-gray-50 hover:bg-gray-50">
+          <li v-for="practice in practices" :key="practice.title" class="group flex p-4 pr-6 focus-within:bg-gray-50 hover:bg-gray-50">
             <div class="flex-auto">
               <p class="font-semibold text-gray-900">{{ practice.title }}</p>
               <time :datetime="practice.practice_date" class="mt-2 flex items-center text-gray-700">
@@ -139,7 +139,7 @@
                 {{ practice.practice_date }}
               </time>
             </div>
-            <Link :href="route('callender.show', { id: practice.id })" class="ml-6 flex-none self-center rounded-md border border-gray-300 bg-white py-2 px-3 font-semibold text-gray-700 opacity-0 shadow-sm hover:bg-gray-50 focus:opacity-100 group-hover:opacity-100"
+            <Link :href="route('callender.show', practice.title)" class="ml-6 flex-none self-center rounded-md border border-gray-300 bg-white py-2 px-3 font-semibold text-gray-700 opacity-0 shadow-sm hover:bg-gray-50 focus:opacity-100 group-hover:opacity-100"
               >Edit<span class="sr-only">, {{ practice.title }}</span></Link>
           </li>
         </ol>

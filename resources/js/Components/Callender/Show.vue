@@ -9,7 +9,10 @@
   <script>
   export default {
     props: {
-      callender: Object,
+      practice: Object,
+    },
+    mounted() {
+      console.log(this.practice);
     },
   };
   </script>
