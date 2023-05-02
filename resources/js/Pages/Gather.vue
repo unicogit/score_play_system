@@ -51,8 +51,8 @@
     },
     methods: {
       createURL(){
-        // this.qrCodeUrl = 'https://scoreplaysystem.unico-unique.com/record/' + this.user.id + '/' + this.lessonName;
-        this.qrCodeUrl = '/record/' + this.user.id + '/' + this.lessonName;
+        this.qrCodeUrl = 'https://scoreplaysystem.unico-unique.com/record/' + this.user.id + '/' + this.lessonName;
+        // this.qrCodeUrl = '/record/' + this.user.id + '/' + this.lessonName;
 
         var qrWrapper = document.getElementById('qr-code-wrapper');
         
