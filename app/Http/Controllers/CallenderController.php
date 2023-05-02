@@ -13,11 +13,13 @@ class CallenderController extends Controller
     
     public function index(Request $request)
     {       
-        $practices = Practice::get();
+        // $practices = Practice::get();
+        $practices = Practice::select('title', 'practice_date')->distinct('title')->groupBy('title', 'practice_date')->get();
             return Inertia::render(
                 'Callender',
                 [
                     'practices'=>$practices,
+                    // 'titles' => $titles,
                 ]
             );  
     }
@@ -57,10 +59,11 @@ class CallenderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($title)
     {
-        $practice = Practice::with('scores')->findOrFail($id);
-        return Inertia::render('Callender/Show', ['data' => $practice]);
+        // $practice = Practice::with('scores')->findOrFail($title);
+        $practice = Practice::where('title', $title)->get();
+        return Inertia::render('Callender/Show', ['practice' => $practice]);
     }
 
     // /**

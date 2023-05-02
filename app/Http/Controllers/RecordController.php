@@ -64,6 +64,7 @@ class RecordController extends Controller
         //$title = $request->input('title');
         $video = $request->file('video');
         $title = $request->input('title');
+        $user_id = $request->input('user_id');
         $practice_date = $request->input('practice_date');
         $created_at = now()->timestamp;
         //videosにstoreしながらパスを取得
@@ -74,6 +75,7 @@ class RecordController extends Controller
             ///'title' => $title,
             'video' => $url,
             'title' => $title,
+            'user_id' => $user_id,
             'practice_date' => $practice_date,
             'created_at' => $created_at,
         ]);

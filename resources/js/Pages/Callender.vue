@@ -42,10 +42,6 @@ const toggleMenu = () => {
         },
     },
     mounted() {
-        this.user = window.Jetstream.inertia.user;
-    },
-    data(){
-        return null
     },
 }
 </script>

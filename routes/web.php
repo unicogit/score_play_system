@@ -11,6 +11,7 @@ use App\Http\Controllers\RecordController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\GatherController;
 use App\Http\Controllers\ScoreController;
+use App\Http\Controllers\PracticeController;
 
 /*
 |--------------------------------------------------------------------------

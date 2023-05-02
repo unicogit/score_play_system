@@ -47,7 +47,6 @@ export default {
         }
     },
     mounted() {
-
         console.log(this.userID + '/' + this.lessonName);
         //カメラにアクセスする処理
         var video = document.getElementById('video');
@@ -71,10 +70,11 @@ export default {
             console.log(e);
             var status = e.message.status;
             this.recording = status == '開始' ? true : false;
-        });
-        window.Echo.channel('multi_record').listen('UploadBlob', (e)=>{
-            console.log('UploadBlob');
-            console.log(e);
+            if(this.recording){
+                recorder.start();
+            }else{
+                recorder.stop();
+            }
         });
         window.Echo.channel('multi_record').listen('UploadBlob', (e)=>{
             console.log('UploadBlob');
@@ -84,6 +84,7 @@ export default {
             let date = new Date();
             formData.append('video', blob);
             formData.append('title', this.lessonName);
+            formData.append('user_id', this.userID);
             formData.append('practice_date', 
                 date.getFullYear() + '-' 
                 + (date.getMonth()+1) + '-' 

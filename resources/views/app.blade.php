@@ -15,6 +15,7 @@
         <script src="/js/pdf.worker.min.js"></script>
         <script src="/js/pdf.worker.min.js"></script>
         <script src="/js/turn.min.js"></script>
+
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead

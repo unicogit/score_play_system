@@ -11,7 +11,7 @@
       </canvas>
     </div>
     <div v-if="isGenerated" id="camera-control-wrapper">
-      <button @click="bcToggleRecording" >撮影{{ ctlrButton }}</button><br>
+      <button @click="bcToggleRecording">撮影{{ ctlrButton }}</button><br>
       <button v-if="isRecorded" @click="bcUpload">アップロード</button>
       <br>
       <a :href="qrCodeUrl">録画画面へ移動</a>

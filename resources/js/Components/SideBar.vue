@@ -66,8 +66,8 @@ const navigation = [
   { name: 'ホーム', href: '/callender', current: home },
   { name: '楽譜登録', href: '/score', current: viewer },
   { name: '新規レッスン登録', href: '/callender/create', current: register },
-    {name: 'レッスンを撮影', href: '/gather'},
-    {name: '録画データを視聴', href: '/playview', current: playview},
+  { name: 'レッスンを撮影', href: '/gather'},
+  { name: '録画データを視聴', href: '/playview', current: playview},
 ]
 </script>
 
