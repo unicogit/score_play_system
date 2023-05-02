@@ -19,29 +19,19 @@
             <!-- <button type="submit">アップロード</button> -->
             <!-- <button @click="toggleDrawing" type="button" class="rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">描画</button> -->
         </div>
-        
-        <div class="videobox" v-for="practice in data" :key="practice.id">
-            <form @submit.prevent="submitFormVideo">
-            <input type="file" ref="video" @change="previewVideo" />
-            <video
-                id="video"
-                width="400"
-                height="300"
-                controls
-                autobuffer
-            >
-                <!-- <source v-if="videoview" :src="videoview" /> -->
-                <source v-if="practice.video" :src="practice.video" />
+        <div id="videos-wrapper">
+            <div class="videobox" v-for="practice in data" :key="practice.id">
+                <video
+                    :src="practice.video"
+                    :id="practice.id"
+                    width="30%"
+                    controls
+                    autobuffer
+                >
+                    <!-- <source v-if="videoview" :src="videoview" /> -->
+                </video>
+            </div>
 
-            </video>
-            </form>
-            <div class="ml-6 h-6 w-px bg-gray-300" />
-            <a href='/recording'>
-            <button type="button" class="ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">単体録画</button>
-            </a>
-            <a href='/record'>
-            <button type="button" class="ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">同時録画</button>
-            </a>
         </div>
     </div>
 </template>
@@ -99,6 +89,7 @@ export default {
                 this.initializeCanvas();
             }
         });
+        console.log(this.data);
     },
     methods: {
         
