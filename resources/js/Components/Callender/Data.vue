@@ -105,7 +105,7 @@
               <ol class="mt-2">
                 <li v-for="practice in practices" :key="practice.title">
                   <!-- <Link v-if="practice.practice_date == year+'-'+('0'+month).slice(-2)+'-'+('0'+day.date).slice(-2)" href="/playview" class="group flex"> -->
-                  <Link v-if="practice.practice_date == year+'-'+('0'+month).slice(-2)+'-'+('0'+day.date).slice(-2)" :href="route('callender.show', practice.title)" class="group flex">
+                  <Link v-if="practice.practice_date == year+'-'+('0'+month).slice(-2)+'-'+('0'+day.date).slice(-2)" :href="route('callender.show', [practice.practice_date, practice.title])" class="group flex">
                     <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">
                       {{ practice.title }}
                     </p>
@@ -139,7 +139,7 @@
                 {{ practice.practice_date }}
               </time>
             </div>
-            <Link :href="route('callender.show', practice.title)" class="ml-6 flex-none self-center rounded-md border border-gray-300 bg-white py-2 px-3 font-semibold text-gray-700 opacity-0 shadow-sm hover:bg-gray-50 focus:opacity-100 group-hover:opacity-100"
+            <Link :href="route('callender.show', [practice.practice_date, practice.title])" class="ml-6 flex-none self-center rounded-md border border-gray-300 bg-white py-2 px-3 font-semibold text-gray-700 opacity-0 shadow-sm hover:bg-gray-50 focus:opacity-100 group-hover:opacity-100"
               >Edit<span class="sr-only">, {{ practice.title }}</span></Link>
           </li>
         </ol>

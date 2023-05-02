@@ -11,8 +11,5 @@
     props: {
       practice: Object,
     },
-    mounted() {
-      console.log(this.practice);
-    },
   };
   </script>

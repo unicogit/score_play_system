@@ -59,11 +59,11 @@ class CallenderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($title)
+    public function show($practice_date, $title)
     {
         // $practice = Practice::with('scores')->findOrFail($title);
-        $practice = Practice::where('title', $title)->get();
-        return Inertia::render('Callender/Show', ['practice' => $practice]);
+        $data = Practice::where('title', $title)->where('practice_date', $practice_date)->get();
+        return Inertia::render('Callender/Show', ['data' => $data]);
     }
 
     // /**

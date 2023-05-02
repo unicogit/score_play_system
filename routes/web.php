@@ -12,6 +12,7 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\GatherController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\PracticeController;
+use App\Models\Callender;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,7 +61,8 @@ Route::middleware([
                 'edit' => 'scores.edit',
                 'update' => 'scores.update',
                 'destroy' => 'scores.destroy',
-                'store'=>'scores.store']);   
+                'store'=>'scores.store']);  
+    Route::get('/callender/{practiceDate}/{lessonName}', [CallenderController::class, 'show'])->name('callender.show'); 
    
     Route::get('/playview', function () {
         return Inertia::render('Playview');

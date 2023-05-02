@@ -20,7 +20,7 @@
             <!-- <button @click="toggleDrawing" type="button" class="rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">描画</button> -->
         </div>
         
-        <div class="videobox">
+        <div class="videobox" v-for="practice in data" :key="practice.id">
             <form @submit.prevent="submitFormVideo">
             <input type="file" ref="video" @change="previewVideo" />
             <video
@@ -30,7 +30,9 @@
                 controls
                 autobuffer
             >
-                <source v-if="videoview" :src="videoview" />
+                <!-- <source v-if="videoview" :src="videoview" /> -->
+                <source v-if="practice.video" :src="practice.video" />
+
             </video>
             </form>
             <div class="ml-6 h-6 w-px bg-gray-300" />
@@ -58,7 +60,7 @@ export default {
         src : {
             type: String,
         },
-        practices:{
+        data:{
             type: Array,
             default: () => [], // デフォルト値を設定する
         } 
@@ -84,12 +86,12 @@ export default {
         };
     },
     computed: {
-    currentImage() {
-      if (this.practices.length) {
-        return this.practices[this.currentPageIndex].score.image_path;
-      }
-      return "";
-    },
+    // currentImage() {
+    //   if (this.practices.length) {
+    //     return this.practices[this.currentPageIndex].score.image_path;
+    //   }
+    //   return "";
+    // },
     },
     mounted() {
         this.$watch("uploadedImage", (newImage) => {
@@ -125,11 +127,11 @@ export default {
             console.error("アップロード失敗", error);
         }
         },
-        nextPage() {
-        if (this.currentPageIndex < this.practices.length - 1) {
-            this.currentPageIndex++;
-        }
-        },
+        // nextPage() {
+        // if (this.currentPageIndex < this.practices.length - 1) {
+        //     this.currentPageIndex++;
+        // }
+        // },
         prevPage() {
         if (this.currentPageIndex > 0) {
             this.currentPageIndex--;
@@ -190,10 +192,10 @@ export default {
         }
         },
         onClickScore(e) {
-            if (!this.timestamp.length) {
-                console.log('Timestamp array is empty');
-                return;
-            }
+            // if (!this.timestamp.length) {
+            //     console.log('Timestamp array is empty');
+            //     return;
+            // }
             const x = e.offsetX;
             const y = e.offsetY;
             console.log(x, y);
