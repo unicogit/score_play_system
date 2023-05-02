@@ -1,14 +1,10 @@
 <template>
-    <div class="py-6">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-            <PlayView
-                :practices="data"
-                :points="points"
-                :timestamp="timestamp"
-                :data="data"
-            />
-        </div>
-    </div>
+    <PlayView
+        :practices="data"
+        :points="points"
+        :timestamp="timestamp"
+        :data="data"
+    />
 </template>
 
 

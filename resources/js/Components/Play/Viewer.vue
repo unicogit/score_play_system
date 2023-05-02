@@ -1,39 +1,80 @@
 <template>
-    <div id="playbox">
-        <div id="scorebox" class="reltive border-2">
-            {{ currentImage }}
+    <div class="flexbox">
+        <div id="score-wrapper">
+            <form @submit.prevent="submitForm">
+                <input type="file" ref="image" @change="previewImage" />
+                <button type="submit">アップロード</button>
+            </form>
+            <button @click="togglePlayback">{{ isPlaying ? '一時停止' : '再生'}}</button>
+            <div
+            @click="onClickScore"
+            id="scorebox"
+            class="relative border-2"
+            style="position: relative;"
+            >
+                <!-- :src="preview" -->
                 <img
-                @click="onClickScore"
-                :src="currentImage || preview"
-                alt="Image Preview"
-                class="image-preview"
-            />
-            <canvas
-                v-if="drawing"
-                ref="canvas"
-                :class="{ 'transparent-canvas': drawing }"
-                @mousedown="startDrawing"
-                @mousemove="draw"
-                @mouseup="stopDrawing"
-            ></canvas>
-            <!-- <button type="submit">アップロード</button> -->
-            <!-- <button @click="toggleDrawing" type="button" class="rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">描画</button> -->
+                    v-if="preview"
+                    :src="displayImage"
+                    alt="Image Preview"
+                    style="position: absolute;"
+                />
+                <img :src="uploadedImage" style="position: absolute;" />
+                <!-- <canvas
+                    ref="canvas"
+                    @mousedown="startPaint"
+                    @mousemove="paint"
+                    @mouseup="stopPaint"
+                    @mouseleave="stopPaint"
+                    style="position: absolute;"
+                ></canvas> -->
+            </div>
         </div>
         <div id="videos-wrapper">
-            <div class="videobox" v-for="practice in data" :key="practice.id">
+            <div class="videobox" v-for="practice in practices" :key="practice.id">
                 <video
-                    :src="practice.video"
-                    :id="practice.id"
-                    width="30%"
-                    controls
+                    ref="video"
+                    class="video"
                     autobuffer
                 >
-                    <!-- <source v-if="videoview" :src="videoview" /> -->
+                    <source :src="practice.video" />
                 </video>
             </div>
-
         </div>
     </div>
+
+    
+        <!-- <div id="playbox">
+            
+            <div id="playbox">
+                <canvas
+                ref="canvas"
+                @mousedown="startPaint"
+                @mousemove="paint"
+                @mouseup="stopPaint"
+                @mouseleave="stopPaint"
+                ></canvas>
+                <div @click="onClickScore" id="scorebox" class="reltive border-2">
+                <img v-if="preview" :src="preview" alt="Image Preview" />
+                <img :src="uploadedImage" />
+                </div>
+                <canvas ref="canvas" @click="onClick"></canvas>
+                <div @click="onClickScore" id="scorebox" class="reltive border-2">
+                    <img v-if="preview" :src="preview" alt="Image Preview" />
+                    <img :src="uploadedImage" />
+                </div>
+            </div>
+            
+
+            <div class="videobox">
+                <form method="POST" action="/upload" enctype="multipart/form-data">
+                @csrf
+                <input type="file" name="video" @change="setVideo" />
+                <button type="submit">Upload</button>
+                </form>
+                <div v-if="videoPath">
+                <video :src="videoPath" ref="video" controls></video>
+            </div> -->
 </template>
 <script>
 import axios from "axios";
@@ -45,15 +86,11 @@ export default {
         },
         timestamp: {
             type: Array,
-            default: () => [],
         },
         src : {
             type: String,
         },
-        data:{
-            type: Array,
-            default: () => [], // デフォルト値を設定する
-        } 
+        practices: [],
     },
     data() {
         return {
@@ -65,23 +102,11 @@ export default {
             imageLoaded: false,
             uploadedImage: "",
             preview: "",
-            videoview: "",
             context: null,
             lineColor: "black",
             lineWidth: 5,
             initialized: false,
-            drawing: false,
-            currentPageIndex: 0,
-            imagePaths: [],
         };
-    },
-    computed: {
-    // currentImage() {
-    //   if (this.practices.length) {
-    //     return this.practices[this.currentPageIndex].score.image_path;
-    //   }
-    //   return "";
-    // },
     },
     mounted() {
         this.$watch("uploadedImage", (newImage) => {
@@ -89,15 +114,32 @@ export default {
                 this.initializeCanvas();
             }
         });
-        console.log(this.data);
+    },
+    watch: {
+    uploadedImage(newImage) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+            this.uploadedImage = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    },
+    },
+    computed: {
+        displayImage() {
+        if (this.uploadedImage) {
+            this.initializeCanvas();
+        }
+        return this.uploadedImage;
+        },
     },
     methods: {
         
         previewImage(event) {
-        this.image = event.target.files[0];
-        this.preview = URL.createObjectURL(this.image);
-        console.log(this.preview);
-        this.loadImageToCanvas();
+            this.image = event.target.files[0];
+            this.preview = URL.createObjectURL(this.image);
         },
         async submitForm() {
         if (!this.image) return;
@@ -112,84 +154,83 @@ export default {
             },
             });
 
-            this.uploadedImage = response.data.path; // 追加
+            // this.$inertia.reload();
+            this.uploadedImage = response.data.path;
             console.log("アップロード成功", response.data);
         } catch (error) {
             console.error("アップロード失敗", error);
         }
         },
-        // nextPage() {
-        // if (this.currentPageIndex < this.practices.length - 1) {
-        //     this.currentPageIndex++;
-        // }
-        // },
-        prevPage() {
-        if (this.currentPageIndex > 0) {
-            this.currentPageIndex--;
-        }
-        },
-
-        loadImageToCanvas() {
-            if (!this.preview) return;
+        initializeCanvas() {
+            const canvas = this.$refs.canvas;
+            const context = canvas.getContext("2d");
+            this.context = context;
 
             const img = new Image();
-            img.src = this.preview;
+            img.src = this.uploadedImage;
             img.onload = () => {
-            this.$refs.canvas.width = img.width;
-            this.$refs.canvas.height = img.height;
-            this.context = this.$refs.canvas.getContext("2d");
-            this.context.drawImage(img, 0, 0);
-            this.drawing = false;
+                canvas.width = img.width;
+                canvas.height = img.height;
+                context.drawImage(img, 0, 0);
+                context.strokeStyle = this.lineColor;
+                context.lineWidth = this.lineWidth;
+
+                this.initialized = true;
             };
         },
-        toggleDrawing() {
-            this.drawing = !this.drawing;
-        },
-        startDrawing(event) {
-            this.drawing = true;
+        startPaint(event) {
+            if (!this.initialized) return;
+
             this.context.beginPath();
-            this.context.moveTo(event.offsetX, event.offsetY);
-        },
-        draw(event) {
-            if (!this.context || !this.drawing) return;
-            this.context.lineTo(event.offsetX, event.offsetY);
+            this.context.moveTo(event.clientX, event.clientY);
+                },
+        paint(event) {
+            if (!this.initialized) return;
+
+            this.context.lineTo(event.clientX, event.clientY);
             this.context.stroke();
         },
-        stopDrawing() {
-            this.drawing = false;
+        stopPaint() {
+            if (!this.initialized) return;
+
+            this.context.closePath();
         },
-
-        previewVideo(event) {
-        const video = event.target.files[0];
-        this.videoview = URL.createObjectURL(video);
-        console.log(this.videoview);
+        onClick(event) {
+            this.context.fillStyle = "red";
+            this.context.beginPath();
+            this.context.arc(
+                event.clientX -
+                this.$refs.canvas.getBoundingClientRect().left -
+                window.pageXOffset,
+                event.clientY -
+                this.$refs.canvas.getBoundingClientRect().top -
+                window.pageYOffset,
+                5, // 半径（サイズを調整）
+                0,
+                2 * Math.PI
+            );
+            this.context.fill();
+            this.context.closePath();
         },
-        async submitFormVideo() {
-        if (!this.video) return;
-
-        const formData = new FormData();
-        formData.append("video", this.video);
-        try {
-            const response = await axios.post("/upload-video", formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-            });
-
-            this.uploadedVideo = response.data.path; // 追加
-            console.log("アップロード成功", response.data);
-        } catch (error) {
-            console.error("アップロード失敗", error);
-        }
+        startPaint(event) {
+            this.painting = true;
+            this.context.beginPath();
+            this.context.moveTo(event.clientX - this.$refs.canvas.offsetLeft, event.clientY - this.$refs.canvas.offsetTop);
+        },
+        paint(event) {
+            if (!this.painting) return;
+            this.context.lineTo(event.clientX - this.$refs.canvas.offsetLeft, event.clientY - this.$refs.canvas.offsetTop);
+            this.context.stroke();
+        },
+        stopPaint() {
+            if (!this.painting) return;
+            this.painting = false;
+            this.context.closePath();
         },
         onClickScore(e) {
-            // if (!this.timestamp.length) {
-            //     console.log('Timestamp array is empty');
-            //     return;
-            // }
             const x = e.offsetX;
             const y = e.offsetY;
-            console.log(x, y);
+            // console.log(x, y);
 
             const points = [];
             const timestamp = this.timestamp;
@@ -271,13 +312,12 @@ export default {
 
 <style>
 /* viewer用css */
-canvs,
-.image-preview {
-  max-width: 100%;
-  max-height: 100%;
-  display: block;
-  object-fit: contain;
-  z-index: 1;
+.flexbox{
+    display: flex;
+}
+#score-wrapper{
+    height: 100vh;
+    width: 50vw;
 }
 #playbox {
     display: flex;
@@ -287,14 +327,17 @@ canvs,
 }
 #scorebox {
     width: 40%;
-    padding: 20px 10px;
+}
+#videos-wrapper{
+    width: 50vw;
+    background-color: gray;
 }
 .videobox {
-    width: 60%;
-    padding: 20px 10px;
+    height: fit-content;
 }
-.transparent-canvas {
-    z-index: 2;
-    opacity: 0.8;
+canvas {
+    width: 40%;
+    padding: 20px 10px;
+    border: 1px solid black;
 }
 </style>
