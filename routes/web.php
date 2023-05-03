@@ -62,7 +62,7 @@ Route::middleware([
                 'update' => 'scores.update',
                 'destroy' => 'scores.destroy',
                 'store'=>'scores.store']);  
-    Route::get('/callender/{practiceDate}/{lessonName}', [CallenderController::class, 'show'])->name('callender.show'); 
+    Route::get('/callender/{practiceDate}/{lessonName}', [CallenderController::class, 'show'])->name('callender.show')->middleware('auth'); 
    
     Route::get('/playview', function () {
         return Inertia::render('Playview');
