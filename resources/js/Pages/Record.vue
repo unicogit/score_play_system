@@ -13,19 +13,9 @@ import axios from 'axios';
         <link rel="stylesheet" href='css/record.css'>
     </Head>
     <div id="app">
-        <!-- <button @click="broadcast">{{ record_status }}</button> -->
-        <div v-show="videoavailable">
-            <button v-on:click="download">録画をダウンロード</button><br>
-            <button @click="upload">録画をアップロード</button>
-            <!-- <form :action="route('record.store')" method="post" enctype="multipart/form-data">
-                <input type="text" name="title">
-                <input type="file" name="video" accept="video/mp4"><br>
-                <input type="submit" value="選択した動画をアップロード">
-            </form> -->
-        </div>
 
         <div id="video-container">
-            <video id="video" v-bind:class="{recording: recording}"></video>
+            <video id="video" v-bind:class="{recording: recording}" muted></video>
         </div>
     </div>
 </template>
