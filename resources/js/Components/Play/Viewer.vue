@@ -114,6 +114,7 @@ export default {
                 this.initializeCanvas();
             }
         });
+        console.log(this.practices);
     },
     watch: {
     uploadedImage(newImage) {

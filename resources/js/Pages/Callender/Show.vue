@@ -32,7 +32,11 @@ export default {
         SideBar,
         PlayView,
     },
-    props: ['data'],
+    props: {
+        data: {
+            type: Array,
+        },
+    },
     mounted(){
         console.log(this.data);
     }
