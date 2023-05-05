@@ -2,15 +2,10 @@
 import { Head } from '@inertiajs/inertia-vue3';
 import axios from 'axios';
 </script>
-<style>
-.recording{
-    border: 3px solid red;
-}
-</style>
 <template>
     <Head>
         <title>撮影画面</title>
-        <link rel="stylesheet" href='css/record.css'>
+        <!-- <link rel="stylesheet" href='css/record.css'> -->
     </Head>
     <div id="app">
 
@@ -19,6 +14,32 @@ import axios from 'axios';
         </div>
     </div>
 </template>
+
+<style>
+#app{
+    background-color: black;
+    width: 100vw;
+    height: 100vh;
+}
+#video-container{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    height: 100vh;
+    width: 100vw;
+    margin: auto;
+}
+video{
+    height: inherit;
+    width: 100vw;
+}
+.recording{
+    border: 3px solid red;
+    outline-offset: 3px;
+}
+
+</style>
+
 <script>
 var constrains = { video: true, audio: true }// 映像・音声を取得するかの設定
 var recorder = null;
