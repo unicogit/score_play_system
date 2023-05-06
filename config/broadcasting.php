@@ -42,7 +42,6 @@ return [
                 'encrypted' => true,
                 'useTLS' => env('PUSHER_SCHEME', 'https') === 'https',
                 'activityTimeout' => 1000,
-                'pongTimeout' => 40000,
             ],
             'client_options' => [
                 // Guzzle client options: https://docs.guzzlephp.org/en/stable/request-options.html
